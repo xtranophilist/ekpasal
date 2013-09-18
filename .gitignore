@@ -1,0 +1,9 @@
+*.pyc
+*~
+.idea
+
+gunicorn.log
+gunicorn-error.log
+gunicorn-access.log
+
+app/settings_secret.py
