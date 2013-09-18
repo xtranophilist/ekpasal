@@ -146,3 +146,5 @@ try:
     from settings_secret import *
 except ImportError:
     pass
+
+AUTH_USER_MODEL = 'users.User'
