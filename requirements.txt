@@ -1,6 +1,0 @@
-django
-gunicorn
-psycopg2
-south
-django-debug-toolbar
-bpython
