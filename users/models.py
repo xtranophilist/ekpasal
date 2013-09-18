@@ -41,7 +41,6 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
-    identifier = models.CharField(max_length=245, null=True)
 
     # USERNAME_FIELD = 'username'
     USERNAME_FIELD = 'username'
