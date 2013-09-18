@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css">
+    <script src="{{ STATIC_URL }}js/vendors/jquery.min.js"></script>
+
+    {% block head_end %}{% endblock %}
+
+</head>
+<body>
+
+{% block content %}
+{% endblock %}
+<footer>
+
+</footer>
+
+</body>
+</html>
