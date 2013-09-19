@@ -32,6 +32,9 @@
                 <li><a href="#" class="button">Link 1</a></li>
                 <li><a href="#" class="button">Link 2</a></li>
                 <li><a href="#" class="button">Link 3</a></li>
+                {% if user.is_admin %}
+                    <li><a href="/admin" class="button">Admin Panel</a></li>
+                {% endif %}
 
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'logout' %}" class="button">Logout</a></li>
