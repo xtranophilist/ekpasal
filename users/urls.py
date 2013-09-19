@@ -1,11 +1,12 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
+from users import views
 
 
 urlpatterns = patterns('',
-                       # url(r'^login/$', web_login, {'template_name': 'registration/login.html'}, name='auth_login'),
+                       url(r'^login/$', views.web_login, name='login'),
+                       url(r'^logout/$', views.logout, name='logout'),
                        # url(r'^register/$', RegistrationView.as_view(form_class=UserRegistrationForm,
                        #                                              template_name='registration/registration_form.html')),
-                       # url(r'^logout/$', logout, name='logout'),
                        # url(r'^list$', UserList.as_view(), name='user-list'),
                        # # url(r'^$', 'users.views.profile'),
                        # url(r'^edit/$', 'users.views.edit_profile'),
@@ -13,5 +14,3 @@ urlpatterns = patterns('',
                        # (r'^', include('registration.backends.default.urls')),
                        # url(r'^(?P<username>[a-zA-Z0-9_.-]+)/$', 'users.views.profile', name='user-detail'),
 )
-
-# Format suffixes
