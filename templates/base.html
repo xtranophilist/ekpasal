@@ -10,7 +10,7 @@
 
     <title>{% block title %}{% endblock %}</title>
 
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css">
     {#    <script src="{{ STATIC_URL }}js/vendors/jquery.min.js"></script>#}
 
     <link rel="stylesheet" href="{{ STATIC_URL }}css/normalize.css">
@@ -32,7 +32,12 @@
                 <li><a href="#" class="button">Link 1</a></li>
                 <li><a href="#" class="button">Link 2</a></li>
                 <li><a href="#" class="button">Link 3</a></li>
-                <li><a href="#" class="button">Link 4</a></li>
+
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}" class="button">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}" class="button">Login</a></li>
+                {% endif %}
             </ul>
         </div>
         <h1>App Title
