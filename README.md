@@ -7,14 +7,14 @@ Static files are on 'static' branch. The base template uses Foundation framework
 Admin panel is enabled by default and is available from url `/admin`.
 
 
-##Installation##:
+##Installation:
 ```
 git clone git@github.com:xtranophilist/django-base.git your_project_name
 cd your_project_name
 pip install -r requirements.txt
 ```
 
-Edit `app/settings_secret.py` to static file paths, urls and database settings.
+Edit `app/settings_secret.py` to change static file paths, urls and database settings.
 
 
 ```
