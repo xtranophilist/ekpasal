@@ -1,0 +1,5 @@
+
+
+.form form input[type="text"], .form form input[type="password"], .form form select, .form form textarea {
+    width: auto;
+}
