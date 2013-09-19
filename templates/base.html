@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!-->
 <html class="no-js" lang="en"> <!--<![endif]-->
@@ -11,8 +10,8 @@
 
     <title>{% block title %}{% endblock %}</title>
 
-{#    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css">#}
-{#    <script src="{{ STATIC_URL }}js/vendors/jquery.min.js"></script>#}
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css">
+    {#    <script src="{{ STATIC_URL }}js/vendors/jquery.min.js"></script>#}
 
     <link rel="stylesheet" href="{{ STATIC_URL }}css/normalize.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/foundation.css">
@@ -27,7 +26,7 @@
 <!-- Nav Bar -->
 
 <div class="row">
-    <div class="large-12 columns">
+    <div class="large-16 columns">
         <div class="nav-bar right">
             <ul class="button-group">
                 <li><a href="#" class="button">Link 1</a></li>
@@ -36,8 +35,8 @@
                 <li><a href="#" class="button">Link 4</a></li>
             </ul>
         </div>
-        <h1>Blog
-            <small>This is my blog. It's awesome.</small>
+        <h1>App Title
+            <small>Slogan</small>
         </h1>
         <hr/>
     </div>
@@ -47,24 +46,10 @@
 
 
 <!-- Main Page Content and Sidebar -->
-
 <div class="row">
 
-    <div class="large-9 columns" role="content">
-
-
-        {% block content %}
-        {% endblock %}
-
-
-    </div>
-
-    <!-- End Main Content -->
-
-
     <!-- Sidebar -->
-
-    <aside class="large-3 columns">
+    <aside class="large-4 columns">
 
         <h5>Categories</h5>
         <ul class="side-nav">
@@ -84,23 +69,24 @@
         </div>
 
     </aside>
-
     <!-- End Sidebar -->
-</div>
 
+    <div class="large-12 columns" role="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <!-- End Main Content -->
+</div>
 <!-- End Main Content and Sidebar -->
 
-
-<!-- Footer -->
-
 <footer class="row">
-    <div class="large-12 columns">
+    <div class="large-16 columns">
         <hr/>
         <div class="row">
-            <div class="large-6 columns">
+            <div class="large-8 columns">
                 <p>&copy; Copyright no one at all. Go to town.</p>
             </div>
-            <div class="large-6 columns">
+            <div class="large-8 columns">
                 <ul class="inline-list right">
                     <li><a href="#">Link 1</a></li>
                     <li><a href="#">Link 2</a></li>
