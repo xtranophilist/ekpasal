@@ -14,12 +14,13 @@ cd your_project_name
 pip install -r requirements.txt
 ```
 
-Edit `app/settings_secret.py` to change static file paths, urls and database settings.
+Edit `app/settings_local.py` to change static file paths, urls and database settings.
 
 
 ```
 ./manage.py syncdb
 ./manage.py migrate
+./manage.py createsuperuser
 ```
 
 For installing static files:
