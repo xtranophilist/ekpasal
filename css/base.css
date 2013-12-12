@@ -2,7 +2,23 @@
     width: auto;
 }
 
-
 .alert-error {
     color: #FF5555;
+}
+
+header h1 {
+    font-size: x-large;
+}
+
+.clear {
+    clear: both;
+}
+
+.center, .centre {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.breadcrumbs {
+    margin: 0 1em 1em 1em;
 }
