@@ -2,13 +2,9 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-
     <meta name="viewport" content="width=device-width"/>
 
     <title>{% block title %}{% endblock %}</title>
-
-
-
 
     <link rel="stylesheet" href="{{ STATIC_URL }}css/normalize.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/foundation.css">
@@ -19,7 +15,7 @@
     <script src="{{ STATIC_URL }}js/vendor/custom.modernizr.js"></script>
     <script src="{{ STATIC_URL }}js/foundation.min.js"></script>
 
-    {% block extra_head %}{% endblock %}
+    {% block extrahead %}{% endblock %}
 
 </head>
 <body>
@@ -28,7 +24,7 @@
 
 <header class="row">
     <div class="large-16 columns">
-        <div class="nav-bar right">
+        <nav class="nav-bar right">
             <ul class="button-group">
                 <li><a href="#" class="small secondary button">Link 1</a></li>
                 <li><a href="#" class="small secondary button">Link 2</a></li>
@@ -43,15 +39,18 @@
                     <li><a href="{% url 'login' %}" class="small secondary button">Login</a></li>
                 {% endif %}
             </ul>
-        </div>
-        <h1>App Title
-            <small>Slogan</small>
-        </h1>
-        <hr/>
+        </nav>
+        <h1>App Name</h1>
     </div>
 </header>
 
 <!-- End Nav -->
+
+<nav class="breadcrumbs">
+    {% block breadcrumbs %}
+        <a href="/">Dashboard</a>
+    {% endblock %}
+</nav>
 
 
 <!-- Main Page Content and Sidebar -->
@@ -88,23 +87,9 @@
 </div>
 <!-- End Main Content and Sidebar -->
 
-<footer class="row">
-    <div class="large-16 columns">
-        <hr/>
-        <div class="row">
-            <div class="large-8 columns">
-                <p>&copy; Copyright no one at all. Go to town.</p>
-            </div>
-            <div class="large-8 columns">
-                <ul class="inline-list right">
-                    <li><a href="#">Link 1</a></li>
-                    <li><a href="#">Link 2</a></li>
-                    <li><a href="#">Link 3</a></li>
-                    <li><a href="#">Link 4</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+<footer class="center row">
+    <hr>
+    <p>&copy; Copyright no one at all. Go to town.</p>
 </footer>
 
 <script>
