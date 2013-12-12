@@ -1,5 +1,22 @@
+.clear {
+    clear: both;
+}
+
+.center, .centre {
+    text-align: center;
+    margin: 0 auto;
+}
+
 .form form input[type="text"], .form form input[type="password"], .form form select, .form form textarea {
     width: auto;
+}
+
+.breadcrumbs {
+    margin: 0 1em 1em 1em;
+}
+
+.no-nesting.row {
+    margin: 0;
 }
 
 .alert-error {
@@ -10,15 +27,15 @@ header h1 {
     font-size: x-large;
 }
 
-.clear {
-    clear: both;
+header nav .inline-list > li {
+    margin: 0;
+    border-right: 1px solid #ABCDEF;
 }
 
-.center, .centre {
-    text-align: center;
-    margin: 0 auto;
+header nav .inline-list > li:last-child {
+    border: none;
 }
 
-.breadcrumbs {
-    margin: 0 1em 1em 1em;
+header nav .inline-list, header nav .inline-list li a {
+    margin: 0;
 }
