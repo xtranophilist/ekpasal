@@ -3,8 +3,8 @@
 {% block title %}Login{% endblock %}
 {% block content %}
 
-    <div class="row form">
-        <h2 class="intro">Login</h2>
+    <div class="form">
+        <h2>Login</h2>
 
         {% if form.errors %}
             <p class="alert alert-error">Your username and password didn't match. Please try again.</p>
@@ -28,9 +28,9 @@
                 <input type="password" name="password" id="id_password" value="{{ username }}" required/>
             </div>
 
-            <div class="row">
-                <input class="column large-1 left" type="checkbox" id="remember_me" name="remember_me" value="true"/>
-                <label class="column large-15 left" for="remember_me">Remember Me</label>
+            <div class="no-nesting row">
+                <input class="column large-2 left" type="checkbox" id="remember_me" name="remember_me" value="true"/>
+                <label class="column large-10 left" for="remember_me">Remember Me</label>
 
             </div>
 
