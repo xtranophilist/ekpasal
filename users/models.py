@@ -40,7 +40,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(verbose_name='email address', max_length=254, unique=True, db_index=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     groups = models.ManyToManyField(Group, related_name='users')
 
     # USERNAME_FIELD = 'username'
@@ -66,6 +66,19 @@ class User(AbstractBaseUser):
 
     def email_user(self, subject, message, from_email):
         pass
+
+    def is_admin(self):
+        return self.is_superuser
+
+    def in_group(self, group_name):
+        try:
+            group = Group.objects.get(name=group_name)
+            return group in self.groups.all()
+        except Group.DoesNotExist:
+            return False
+
+    def __str__(self):
+        return self.full_name
 
     objects = UserManager()
 
