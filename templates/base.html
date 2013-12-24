@@ -25,22 +25,13 @@
 
 <header class="row">
 
-    <h1 class="large-3 column">App Name</h1>
+    <h1 class="large-3 column">EkPasal</h1>
 
     <nav class="nav-bar large-9 column">
         <ul class="inline-list right">
             <li><a href="#" class="small secondary button">Link 1</a></li>
             <li><a href="#" class="small secondary button">Link 2</a></li>
             <li><a href="#" class="small secondary button">Link 3</a></li>
-            {% if user.is_admin %}
-                <li><a href="/admin" class="small secondary button">Admin Panel</a></li>
-            {% endif %}
-
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'logout' %}" class="small secondary button">Logout</a></li>
-            {% else %}
-                <li><a href="{% url 'login' %}" class="small secondary button">Login</a></li>
-            {% endif %}
         </ul>
     </nav>
 
