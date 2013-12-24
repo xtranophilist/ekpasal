@@ -14,27 +14,27 @@ MEDIA_ROOT = '/var/www/html/static/seed/media'
 # Examples: "http://example.com/media/", "http://media.example.com/"
 MEDIA_URL = 'http://localhost/static/seed/media/'
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'goms',
-#        'USER': 'goms',
-#        'PASSWORD': 'goms',
-#        'HOST': 'localhost', # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-#        'PORT': '', # Set to empty string for default.
-#    }
-#}
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db',
-        #'USER': 'seed',
-        #'PASSWORD': 'seed',
-        #'HOST': 'localhost', # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        #'PORT': '', # Set to empty string for default.
-    }
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+       'NAME': 'ekpasal',
+       'USER': 'ekpasal',
+       'PASSWORD': 'ekpasal',
+       'HOST': 'localhost', # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+       'PORT': '', # Set to empty string for default.
+   }
 }
+#
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'db',
+#         #'USER': 'seed',
+#         #'PASSWORD': 'seed',
+#         #'HOST': 'localhost', # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+#         #'PORT': '', # Set to empty string for default.
+#     }
+# }
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',

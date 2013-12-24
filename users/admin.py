@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, UserChangeForm as DjangoUserChangeForm, UserCreationForm as DjangoUserCreationForm
+from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django import forms
 
@@ -74,7 +75,9 @@ class CustomUserAdmin(UserAdmin):
     list_filter = ('is_staff', 'is_superuser')
     fieldsets = (
         (None,
-         {'fields': ('full_name', 'username', 'email', 'password', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'groups')}),
+         {'fields': (
+         'full_name', 'username', 'email', 'password', 'is_active', 'is_staff', 'is_superuser', 'last_login',
+         'groups')}),
     )
     add_fieldsets = (
         (None, {
@@ -84,7 +87,8 @@ class CustomUserAdmin(UserAdmin):
     )
 
 
-admin.site.register(User, CustomUserAdmin)
+# admin.site.register(User, CustomUserAdmin)
 
 # Removing default apps
 admin.site.unregister(Site)
+admin.site.unregister(Group)

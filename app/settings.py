@@ -131,5 +131,5 @@ except ImportError:
     pass
 
 AUTH_USER_MODEL = 'users.User'
-LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/user/login/'
+# LOGIN_REDIRECT_URsL = '/'
+# LOGIN_URL = '/user/login/'
