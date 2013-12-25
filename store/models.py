@@ -82,3 +82,14 @@ class Product(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class ProductInfo(models.Model):
+    product = models.ForeignKey(Product)
+    store = models.ForeignKey(Store)
+    availability = models.IntegerField()
+    price = models.FloatField()
+    currency = models.ForeignKey(Currency)
+
+    def __unicode__(self):
+        return self.product.name + ' on ' + self.store.name
