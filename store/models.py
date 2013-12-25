@@ -13,7 +13,7 @@ class Store(models.Model):
     last_updated = models.DateTimeField()
     # products = models.ManyToManyField(Product, through='ProductInfo')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -27,7 +27,7 @@ class Vendor(models.Model):
     rating = models.FloatField(null=True)
     foreign = models.NullBooleanField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -39,7 +39,7 @@ class Brand(models.Model):
     rating = models.FloatField(null=True)
     foreign = models.NullBooleanField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -48,7 +48,7 @@ class Currency(models.Model):
     short_name = models.CharField(max_length=5)
     exchange_rate = models.FloatField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -66,7 +66,7 @@ class Category(MPTTModel):
     def get_plural_name(self):
         return self.plural_name or self.name + 's'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -84,7 +84,7 @@ class Product(models.Model):
     attributes = JSONField()
     stores = models.ManyToManyField(Store, through='ProductInfo', related_name='products')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -99,5 +99,5 @@ class ProductInfo(models.Model):
     vendor = models.ForeignKey(Vendor)
     purchase_url = models.CharField(max_length=254)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.product.name + ' on ' + self.store.name
