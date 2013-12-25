@@ -11,6 +11,7 @@ class Store(models.Model):
     status = models.BooleanField()
     rating = models.FloatField(null=True)
     last_updated = models.DateTimeField()
+    # products = models.ManyToManyField(Product, through='ProductInfo')
 
     def __unicode__(self):
         return self.name
@@ -79,6 +80,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, null=True)
     category = models.ForeignKey(Category)
     attributes = JSONField()
+    stores = models.ManyToManyField(Store, through='ProductInfo', related_name='products')
 
     def __unicode__(self):
         return self.name
