@@ -87,8 +87,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'south',
+    'mptt',
 
     'users',
+    'store',
 
 
     'django.contrib.admin',
