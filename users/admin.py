@@ -87,7 +87,7 @@ class CustomUserAdmin(UserAdmin):
     )
 
 
-# admin.site.register(User, CustomUserAdmin)
+admin.site.register(User, CustomUserAdmin)
 
 # Removing default apps
 admin.site.unregister(Site)

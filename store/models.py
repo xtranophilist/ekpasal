@@ -48,6 +48,9 @@ class Currency(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = u'Currencies'
+
 
 class Category(MPTTModel):
     name = models.CharField(max_length=50)
@@ -64,7 +67,7 @@ class Category(MPTTModel):
         return self.name
 
     class Meta:
-        verbose_name_plural = u'Inventory Categories'
+        verbose_name_plural = u'Categories'
 
 
 class Product(models.Model):
