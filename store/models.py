@@ -21,6 +21,8 @@ class Vendor(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255)
     description = models.TextField(null=True)
+    address = models.TextField(null=True)
+    phone = models.CharField(null=True, max_length=50)
     image = models.ImageField(upload_to='images/stores/', null=True)
     rating = models.FloatField(null=True)
     foreign = models.NullBooleanField()
@@ -75,10 +77,10 @@ class Product(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=255)
     image = models.ImageField(upload_to='images/products/', null=True)
-    description = models.CharField(max_length=254, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     rating = models.FloatField(null=True)
     brand = models.ForeignKey(Brand, null=True)
-    category = models.ForeignKey(Category)
+    categories = models.ManyToManyField(Category)
     attributes = JSONField()
     stores = models.ManyToManyField(Store, through='ProductInfo', related_name='products')
 
@@ -88,10 +90,14 @@ class Product(models.Model):
 
 class ProductInfo(models.Model):
     product = models.ForeignKey(Product)
+    code = models.CharField(max_length=100)
     store = models.ForeignKey(Store)
     availability = models.IntegerField()
+    original_price = models.FloatField(null=True)
     price = models.FloatField()
     currency = models.ForeignKey(Currency)
+    vendor = models.ForeignKey(Vendor)
+    purchase_url = models.CharField(max_length=254)
 
     def __unicode__(self):
         return self.product.name + ' on ' + self.store.name
