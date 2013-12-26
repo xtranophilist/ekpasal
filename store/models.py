@@ -1,11 +1,12 @@
 from django.db import models
+from django.utils.text import slugify
 from mptt.models import MPTTModel, TreeForeignKey
 from jsonfield import JSONField
 
 
 class Store(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, blank=True)
     description = models.TextField(null=True)
     image = models.ImageField(upload_to='images/stores/', null=True)
     status = models.BooleanField()
@@ -15,10 +16,14 @@ class Store(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Store, self).save(*args, **kwargs)
+
 
 class Vendor(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, blank=True)
     description = models.TextField(null=True)
     address = models.TextField(null=True)
     phone = models.CharField(null=True, max_length=50)
@@ -29,10 +34,14 @@ class Vendor(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Vendor, self).save(*args, **kwargs)
+
 
 class Brand(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, blank=True)
     description = models.TextField(null=True)
     image = models.ImageField(upload_to='images/brands/', null=True)
     rating = models.FloatField(null=True)
@@ -40,6 +49,10 @@ class Brand(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Brand, self).save(*args, **kwargs)
 
 
 class Currency(models.Model):
@@ -56,7 +69,7 @@ class Currency(models.Model):
 
 class Category(MPTTModel):
     name = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, blank=True)
     image = models.ImageField(upload_to='images/categories/', null=True)
     description = models.CharField(max_length=254, null=True, blank=True)
     parent = TreeForeignKey('self', blank=True, null=True, related_name='children')
@@ -71,15 +84,23 @@ class Category(MPTTModel):
     class Meta:
         verbose_name_plural = u'Categories'
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
+
+
+class Image(models.Model):
+    image = models.ImageField(upload_to='images/products/', null=True)
+
 
 class Product(models.Model):
     name = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=255)
-    image = models.ImageField(upload_to='images/products/', null=True)
+    slug = models.SlugField(max_length=255, blank=True)
     description = models.TextField(null=True, blank=True)
     rating = models.FloatField(null=True)
     brand = models.ForeignKey(Brand, null=True)
-    categories = models.ManyToManyField(Category)
+    images = models.ManyToManyField(Image, related_name='products')
+    categories = models.ManyToManyField(Category, related_name='products')
     attributes = JSONField()
     stores = models.ManyToManyField(Store, through='ProductInfo', related_name='products')
     # new = models.BooleanField(default=True)
@@ -89,6 +110,10 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Product, self).save(*args, **kwargs)
 
 
 class ProductInfo(models.Model):
