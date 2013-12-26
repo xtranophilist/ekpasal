@@ -11,7 +11,6 @@ class Store(models.Model):
     status = models.BooleanField()
     rating = models.FloatField(null=True)
     last_updated = models.DateTimeField()
-    # products = models.ManyToManyField(Product, through='ProductInfo')
 
     def __str__(self):
         return self.name
@@ -83,6 +82,10 @@ class Product(models.Model):
     categories = models.ManyToManyField(Category)
     attributes = JSONField()
     stores = models.ManyToManyField(Store, through='ProductInfo', related_name='products')
+    # new = models.BooleanField(default=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    views = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name
