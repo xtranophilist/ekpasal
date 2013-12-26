@@ -7,3 +7,4 @@ bpython
 django-mptt
 jsonfield
 PIL
+lxml
