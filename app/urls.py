@@ -7,9 +7,10 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
                        # Examples:
-                       url(r'^$', users_views.index, name='home'),
+
                        # (r'^user/', include('users.urls')),
                        # url(r'^app/', include('app.foo.urls')),
 
                        url(r'^admin/', include(admin.site.urls)),
+                       url(r'', include('store.urls')),
 )

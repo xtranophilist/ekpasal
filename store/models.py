@@ -70,10 +70,10 @@ class Currency(models.Model):
 class Category(MPTTModel):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=255, blank=True)
-    image = models.ImageField(upload_to='images/categories/', null=True)
+    image = models.ImageField(upload_to='images/categories/', null=True, blank=True)
     description = models.CharField(max_length=254, null=True, blank=True)
     parent = TreeForeignKey('self', blank=True, null=True, related_name='children')
-    plural_name = models.CharField(max_length=154, null=True)
+    plural_name = models.CharField(max_length=154, null=True, blank=True)
 
     def get_plural_name(self):
         return self.plural_name or self.name + 's'
