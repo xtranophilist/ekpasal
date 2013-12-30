@@ -1,5 +1,7 @@
 __author__ = 'xtranophilist'
-from yeskantipur import Yeskantipur
+
+from store.aggregators.yeskantipur import Yeskantipur
 
 yk = Yeskantipur()
 yk.mine()
+

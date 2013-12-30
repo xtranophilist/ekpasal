@@ -52,7 +52,6 @@ class Yeskantipur():
                             # import bpdb
                             # bpdb.set_trace()
 
-
     def collect_products(self, el, category_text):
         link_el = el.xpath('./a')[0]
         link = link_el.get('href')
@@ -69,6 +68,5 @@ class Yeskantipur():
     def write_product(self, url, category_text):
         page = html.parse(url)
         import bpdb;
-
         bpdb.set_trace()
         title = page.xpath('.//div[@class="product_title"]/h1')[0].text_content()
