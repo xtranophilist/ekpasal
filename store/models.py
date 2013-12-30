@@ -101,7 +101,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, null=True)
     images = models.ManyToManyField(Image, related_name='products')
     categories = models.ManyToManyField(Category, related_name='products')
-    attributes = JSONField()
+    attributes = JSONField(null=True)
     stores = models.ManyToManyField(Store, through='ProductInfo', related_name='products')
     # new = models.BooleanField(default=True)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -118,13 +118,13 @@ class Product(models.Model):
 
 class ProductInfo(models.Model):
     product = models.ForeignKey(Product)
-    code = models.CharField(max_length=100)
+    code = models.CharField(max_length=100, null=True)
     store = models.ForeignKey(Store)
     availability = models.IntegerField()
     original_price = models.FloatField(null=True)
     price = models.FloatField()
     currency = models.ForeignKey(Currency)
-    vendor = models.ForeignKey(Vendor)
+    vendor = models.ForeignKey(Vendor, null=True)
     purchase_url = models.CharField(max_length=254)
 
     def __str__(self):
