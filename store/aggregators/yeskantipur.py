@@ -1,29 +1,28 @@
 __author__ = 'xtranophilist'
 from lxml import html
+from lxml.etree import tostring
+import re
 
-# import os
-# import sys
-#
-# parent_dir = os.path.join(os.path.dirname(__file__), '..', '..'),
-# sys.path.append(parent_dir)
-#
-# print parent_dir
-
-from store import models
+from store.models import Product, Category, Store, ProductInfo, Currency
 
 
 class Yeskantipur():
-    def __init__(self):
-        pass
+    name = 'YesKantipur'
 
-    # root_url = 'http://www.yeskantipur.com'
-    root_url = 'http://localhost/yk'
+    def __init__(self):
+        self.store = Store.objects.get(name=self.name)
+        self.currency = Currency.objects.get(name='NPR')
+
+
+    root_url = 'http://www.yeskantipur.com'
+    # root_url = 'http://localhost/yk'
 
     category_mapping = {
         'Gents': 'Men'
     }
 
     def mine(self):
+        print 'Mining for ' + self.name
         root_page = html.parse(self.root_url)
         root_category_elements = root_page.xpath('//*[@id="column-left"]//ul[@id="navigation"]/li')
         self.parse_category_tree(root_category_elements)
@@ -53,6 +52,8 @@ class Yeskantipur():
                             # bpdb.set_trace()
 
     def collect_products(self, el, category_text):
+        category_text = unicode(category_text)
+        print 'Collecting Products for category: ' + category_text
         link_el = el.xpath('./a')[0]
         link = link_el.get('href')
         link = 'http://localhost/yk/products/'
@@ -62,11 +63,54 @@ class Yeskantipur():
             products = grid.xpath('./div')
             for product in products:
                 url = product.xpath('.//a[1]')[0].get('href')
-                url = 'http://localhost/yk/product/'
+                # url = 'http://localhost/yk/product1/'
                 self.write_product(url, category_text)
 
     def write_product(self, url, category_text):
         page = html.parse(url)
-        import bpdb;
-        bpdb.set_trace()
-        title = page.xpath('.//div[@class="product_title"]/h1')[0].text_content()
+        name = unicode(page.xpath('.//div[@class="product_title"]/h1')[0].text_content())
+        print 'Writing product : ' + name
+        category = Category.objects.get(name=self.category_mapping[category_text])
+        try:
+            product = Product.objects.get(categories=category, name=name)
+        except Product.DoesNotExist:
+            product = Product(name=name)
+            product.save()
+        product.categories.add(category)
+        product.save()
+        try:
+            product_info = ProductInfo.objects.get(product=product, store=self.store)
+        except ProductInfo.DoesNotExist:
+            product_info = ProductInfo(product=product, store=self.store)
+        price_el = page.xpath('.//div[@class="product-info"]//div[@class="price"]')[0]
+        old_price_els = price_el.xpath('./span[@class="price-old"]')
+        if len(old_price_els):
+            old_price_el = old_price_els[0]
+            old_price_content = old_price_el.text_content()
+            old_price = float(re.search('Rs\.([\d,\.]+)', old_price_content).group(1).replace(',', ''))
+            product_info.original_price = old_price
+            new_price_els = price_el.xpath('./span[@class="price-new"]')
+            new_price_el = new_price_els[0]
+            new_price_content = new_price_el.text_content()
+            new_price = float(re.search('Rs\.([\d,\.]+)', new_price_content).group(1).replace(',', ''))
+            product_info.price = new_price
+        else:
+            price_with_comma = re.search('Price:\s+Rs\.([\d,\.]+)', price_el.text_content()).group(1)
+            product_info.price = float(price_with_comma.replace(',', ''))
+
+        product_info.currency = self.currency
+        description_text = page.xpath('.//div[@class="product-info"]//div[@class="description"]')[0].text_content()
+        product_info.product_code = re.search('Product Code:\s(.+)\\n', description_text).group(1)
+        availability_text = re.search('Availability:\s(.+)', description_text).group(1)
+        # get vendor
+        if availability_text == 'In Stock':
+            product_info.availability = 0
+        description_el = page.xpath('//div[@id="tab-description"]')[0]
+        product.description = tostring(description_el)
+        product_info.purchase_url = url
+        product.save()
+        product_info.save()
+
+        # import bpdb
+        #
+        # bpdb.set_trace()
