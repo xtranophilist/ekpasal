@@ -94,7 +94,7 @@ class Image(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=254)
     slug = models.SlugField(max_length=255, blank=True)
     description = models.TextField(null=True, blank=True)
     rating = models.FloatField(null=True)
@@ -119,6 +119,8 @@ class Product(models.Model):
 class ProductInfo(models.Model):
     product = models.ForeignKey(Product)
     code = models.CharField(max_length=100, null=True)
+    # rating
+    # reviews
     store = models.ForeignKey(Store)
     availability = models.IntegerField()
     original_price = models.FloatField(null=True)
