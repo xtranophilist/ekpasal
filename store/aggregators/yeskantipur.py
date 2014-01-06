@@ -18,7 +18,7 @@ class Yeskantipur():
 
     category_mapping = {
         'Gents': 'Men',
-        # 'Ladies': 'Women',
+        'Ladies': 'Women',
         # 'Sun Glasses': 'Eyewear',
         # 'Fiction': 'Fiction',
         # 'Biography & Autobiography': 'Biography',

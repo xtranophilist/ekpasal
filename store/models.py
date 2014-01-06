@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from mptt.models import MPTTModel, TreeForeignKey
 from jsonfield import JSONField
+from app.libr import unique_slugify
 
 
 class Store(models.Model):
@@ -17,7 +18,7 @@ class Store(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        unique_slugify(self, self.name)
         super(Store, self).save(*args, **kwargs)
 
 
@@ -35,7 +36,7 @@ class Vendor(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        unique_slugify(self, self.name)
         super(Vendor, self).save(*args, **kwargs)
 
 
@@ -51,7 +52,7 @@ class Brand(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        unique_slugify(self, self.name)
         super(Brand, self).save(*args, **kwargs)
 
 
@@ -85,7 +86,7 @@ class Category(MPTTModel):
         verbose_name_plural = u'Categories'
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        unique_slugify(self, self.name)
         super(Category, self).save(*args, **kwargs)
 
 
@@ -112,7 +113,7 @@ class Product(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        unique_slugify(self, self.name)
         super(Product, self).save(*args, **kwargs)
 
 
