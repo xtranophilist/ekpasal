@@ -82,7 +82,7 @@ class Yeskantipur():
             if len(next_els):
                 next_el = next_els[0]
                 self.collect_products(next_el.get('href'), category_text)
-            
+
 
     def write_product(self, url, category_text):
         page = html.parse(url)
