@@ -1,8 +1,10 @@
+import urllib
 from django.db import models
-from django.utils.text import slugify
 from mptt.models import MPTTModel, TreeForeignKey
 from jsonfield import JSONField
 from app.libr import unique_slugify
+from django.core.files import File
+import os
 
 
 class Store(models.Model):
@@ -91,7 +93,21 @@ class Category(MPTTModel):
 
 
 class Image(models.Model):
-    image = models.ImageField(upload_to='images/products/', null=True)
+    image_file = models.ImageField(upload_to='images/products/', null=True)
+    image_url = models.URLField()
+
+    def get_remote_image(self):
+        if self.image_url and not self.image_file:
+            result = urllib.urlretrieve(self.image_url)
+            self.image_file.save(
+                os.path.basename(self.image_url),
+                File(open(result[0]))
+            )
+            # self.save()
+
+    def save(self, *args, **kwargs):
+        self.get_remote_image()
+        super(Image, self).save(*args, **kwargs)
 
 
 class Product(models.Model):
