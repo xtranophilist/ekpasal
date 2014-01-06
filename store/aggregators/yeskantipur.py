@@ -17,9 +17,9 @@ class Yeskantipur():
     # root_url = 'http://localhost/yk'
 
     category_mapping = {
-        # 'Gents': 'Men',
+        'Gents': 'Men',
         # 'Ladies': 'Women',
-        'Sun Glasses': 'Eyewear',
+        # 'Sun Glasses': 'Eyewear',
         # 'Fiction': 'Fiction',
         # 'Biography & Autobiography': 'Biography',
         # 'Politics & History': 'Politics & History',
