@@ -13,12 +13,35 @@ class Yeskantipur():
         self.store = Store.objects.get(name=self.name)
         self.currency = Currency.objects.get(name='NPR')
 
-
     root_url = 'http://www.yeskantipur.com'
     # root_url = 'http://localhost/yk'
 
     category_mapping = {
-        'Gents': 'Men'
+        # 'Gents': 'Men',
+        # 'Ladies': 'Women',
+        'Sun Glasses': 'Eyewear',
+        # 'Fiction': 'Fiction',
+        # 'Biography & Autobiography': 'Biography',
+        # 'Politics & History': 'Politics & History',
+        # 'Business Management': 'Business',
+        # 'Children': 'Children',
+        # 'Music': 'Music',
+        # 'Economics': 'Economics',
+        # 'Novels': 'Fiction',
+        # 'Nepali': 'Nepali',
+        # 'Mobiles': 'Mobile',
+        # 'Desktops': 'Desktop Computers',
+        # 'Laptops & Notebooks': 'Laptops',
+        # 'Tablets': 'Tablets',
+        # 'Television': 'Television',
+        # 'Monitors': 'Monitors',
+        # 'Cameras': 'Camera',
+        # 'Shoes': 'Shoes',
+        # 'Bags': 'Bags',
+        # 'Jewelry': 'Jewelry',
+        # 'Toys': 'Kids & Toys',
+        # 'Bouquets & Flowers': 'Flowers',
+        # 'Cakes': 'Cakes',
     }
 
     def mine(self):
@@ -33,38 +56,33 @@ class Yeskantipur():
             if len(category_link_list):
                 category_link = category_link_list[0]
                 category_text = category_link.text_content()
-                # print category_text
                 if category_text in self.category_mapping:
-                    self.collect_products(el, category_text)
+                    category_text = unicode(category_text)
+                    print 'Collecting Products for category: ' + category_text
+                    link_el = el.xpath('./a')[0]
+                    link = link_el.get('href')
+                    # link = 'http://localhost/yk/products/'
+                    if link:
+                        self.collect_products(link, category_text)
                 else:
                     sub_categories_el = el.xpath('./ul')
                     if sub_categories_el:
-                        # import bpdb;
-                        #
-                        # bpdb.set_trace()
                         if not len(sub_categories_el[0].xpath('./li[@class="category-vendor-head box-heading"]')):
                             self.parse_category_tree(el.xpath('./ul/li'))
-                            # pass
 
-                            # import bpdb;bpdb.set_trace()
-
-                            # import bpdb
-                            # bpdb.set_trace()
-
-    def collect_products(self, el, category_text):
-        category_text = unicode(category_text)
-        print 'Collecting Products for category: ' + category_text
-        link_el = el.xpath('./a')[0]
-        link = link_el.get('href')
-        link = 'http://localhost/yk/products/'
-        if link:
+    def collect_products(self, link, category_text):
             products_page = html.parse(link)
-            grid = products_page.xpath('//div[@class="product-grid"]')[0]
+            grid = products_page.xpath('//div[@class="product-list"]')[0]
             products = grid.xpath('./div')
             for product in products:
                 url = product.xpath('.//a[1]')[0].get('href')
                 # url = 'http://localhost/yk/product1/'
                 self.write_product(url, category_text)
+            next_els = products_page.xpath('//div[@class="pagination"]//a[text()=">"]')
+            if len(next_els):
+                next_el = next_els[0]
+                self.collect_products(next_el.get('href'), category_text)
+            
 
     def write_product(self, url, category_text):
         page = html.parse(url)
@@ -82,7 +100,11 @@ class Yeskantipur():
             product_info = ProductInfo.objects.get(product=product, store=self.store)
         except ProductInfo.DoesNotExist:
             product_info = ProductInfo(product=product, store=self.store)
-        price_el = page.xpath('.//div[@class="product-info"]//div[@class="price"]')[0]
+        price_els = page.xpath('.//div[@class="product-info"]//div[@class="price"]')
+        if len(price_els):
+            price_el = price_els[0]
+        else:
+            return
         old_price_els = price_el.xpath('./span[@class="price-old"]')
         if len(old_price_els):
             old_price_el = old_price_els[0]
