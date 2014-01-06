@@ -58,37 +58,37 @@ class Yeskantipur():
                 category_text = category_link.text_content()
                 if category_text in self.category_mapping:
                     category_text = unicode(category_text)
+                    category = Category.objects.get(name=self.category_mapping[category_text])
                     print 'Collecting Products for category: ' + category_text
                     link_el = el.xpath('./a')[0]
                     link = link_el.get('href')
                     # link = 'http://localhost/yk/products/'
                     if link:
-                        self.collect_products(link, category_text)
+                        self.collect_products(link, category)
                 else:
                     sub_categories_el = el.xpath('./ul')
                     if sub_categories_el:
                         if not len(sub_categories_el[0].xpath('./li[@class="category-vendor-head box-heading"]')):
                             self.parse_category_tree(el.xpath('./ul/li'))
 
-    def collect_products(self, link, category_text):
-            products_page = html.parse(link)
-            grid = products_page.xpath('//div[@class="product-list"]')[0]
-            products = grid.xpath('./div')
-            for product in products:
-                url = product.xpath('.//a[1]')[0].get('href')
-                # url = 'http://localhost/yk/product1/'
-                self.write_product(url, category_text)
-            next_els = products_page.xpath('//div[@class="pagination"]//a[text()=">"]')
-            if len(next_els):
-                next_el = next_els[0]
-                self.collect_products(next_el.get('href'), category_text)
+    def collect_products(self, link, category):
+        products_page = html.parse(link)
+        grid = products_page.xpath('//div[@class="product-list"]')[0]
+        products = grid.xpath('./div')
+        for product in products:
+            url = product.xpath('.//a[1]')[0].get('href')
+            # url = 'http://localhost/yk/product1/'
+            self.write_product(url, category)
+        next_els = products_page.xpath('//div[@class="pagination"]//a[text()=">"]')
+        if len(next_els):
+            next_el = next_els[0]
+            self.collect_products(next_el.get('href'), category)
 
-
-    def write_product(self, url, category_text):
+    def write_product(self, url, category):
         page = html.parse(url)
         name = unicode(page.xpath('.//div[@class="product_title"]/h1')[0].text_content())
         print 'Writing product : ' + name
-        category = Category.objects.get(name=self.category_mapping[category_text])
+
         try:
             product = Product.objects.get(categories=category, name=name)
         except Product.DoesNotExist:
@@ -100,6 +100,7 @@ class Yeskantipur():
             product_info = ProductInfo.objects.get(product=product, store=self.store)
         except ProductInfo.DoesNotExist:
             product_info = ProductInfo(product=product, store=self.store)
+
         price_els = page.xpath('.//div[@class="product-info"]//div[@class="price"]')
         if len(price_els):
             price_el = price_els[0]
