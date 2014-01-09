@@ -14,7 +14,7 @@
         {% recursetree categories %}
             <li>
                 {#                <a href="{% url 'update_inventory_category' node.id %}">#}
-                {{ node.name }}
+                <a href="{% url 'view_category' node.slug%}">{{ node.name }}</a>
                 {#                </a>#}
                 {% if not node.is_leaf_node %}
                     <ul class="children">
