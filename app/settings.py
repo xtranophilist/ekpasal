@@ -88,7 +88,8 @@ INSTALLED_APPS = (
 
     'south',
     'mptt',
-    'sorl.thumbnail',
+    'easy_thumbnails',
+
 
     'users',
     'store',
@@ -136,3 +137,11 @@ except ImportError:
 AUTH_USER_MODEL = 'users.User'
 # LOGIN_REDIRECT_URsL = '/'
 # LOGIN_URL = '/user/login/'
+
+THUMBNAIL_ALIASES = {
+    '': {
+        'avatar': {'size': (50, 50), 'crop': False},
+    },
+}
+
+THUMBNAIL_DEBUG = True
