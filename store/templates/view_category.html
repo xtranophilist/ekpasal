@@ -16,7 +16,7 @@
         <div class="product-block">
             <a href="{% url 'view_product' product.slug %}">
                 <img src="{{ product.images.all.first.image_file|thumbnail_url:'grid' }}" alt=""/>
-                {{ product.name }} | {{ product.info.all|get_starting_price}}
+                {{ product.name }} | {{ product.info.currency }}{{ product.info.all|get_starting_price}}
             </a>
 
         </div>

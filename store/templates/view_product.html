@@ -8,9 +8,32 @@
 {% endblock %}
 
 {% load thumbnail %}
+{% load custom %}
 
 {% block content %}
 
-    {{ product.name }}
+    <h1>{{ product.name }}</h1>
+
+    {% for info in product.info.all %}
+        <div class="product-info">
+            <div>
+                Price :{% if info.original_price %}
+                <span class="original-price">{{ info.currency }} {{ info.original_price }}</span>
+            {% endif %}
+                {{ info.currency }} {{ info.price }}
+            </div>
+            <div>Availability: {{ info.availability|parse_availability }}</div>
+
+        </div>
+
+        <a href="{{ info.purchase_url }}" target="_blank" class="button">View/Purchase from {{ info.store }}</a>
+
+    {% endfor %}
+
+    <h3>Description:</h3>
+    <div class="description">
+        {{ product.description|safe }}
+    </div>
+
 
 {% endblock %}

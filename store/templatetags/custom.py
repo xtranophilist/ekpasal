@@ -14,3 +14,11 @@ def get_starting_price(objects):
             starting_price = obj.price
     return 'Starting from '+ str(starting_price)
 
+@register.filter
+def parse_availability(availability):
+    if availability == 0:
+        return 'In Stock'
+    elif availability == 0:
+        return 'Out of Stock'
+    else:
+        return availability
