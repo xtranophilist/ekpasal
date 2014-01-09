@@ -8,3 +8,4 @@ django-mptt
 jsonfield
 PIL
 lxml
+sorl-thumbnail
