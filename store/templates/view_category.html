@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <span>{{ category }}</span>
+{% endblock %}
+
+{% block content %}
+
+    {% for product in category.products.all %}
+<div class="product-block">
+{{ product.images.all.first.image_file }}
+</div>
+
+
+    {% endfor %}
+
+{% endblock %}
