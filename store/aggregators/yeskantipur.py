@@ -3,7 +3,7 @@ from lxml import html
 from lxml.etree import tostring
 import re
 
-from store.models import Product, Category, Store, ProductInfo, Currency
+from store.models import Product, Category, Store, ProductInfo, Currency, Image
 
 
 class Yeskantipur():
@@ -18,7 +18,7 @@ class Yeskantipur():
 
     category_mapping = {
         'Gents': 'Men',
-        'Ladies': 'Women',
+        # 'Ladies': 'Women',
         # 'Sun Glasses': 'Eyewear',
         # 'Fiction': 'Fiction',
         # 'Biography & Autobiography': 'Biography',
@@ -100,6 +100,23 @@ class Yeskantipur():
             product_info = ProductInfo.objects.get(product=product, store=self.store)
         except ProductInfo.DoesNotExist:
             product_info = ProductInfo(product=product, store=self.store)
+        # TODO: write only if images are new
+        # delete existing images first
+        images = product.images.all()
+        # product.images.clear()
+        for image in images:
+            image.delete()
+
+        primary_image_url = page.xpath('//div[@class="product-info"]//div[@class="image"]/a')[0].get('href')
+        image = Image(image_url=primary_image_url)
+        image.save()
+        product.images.add(image)
+        additional_image_links = page.xpath('//div[@class="image-additional"]/a')
+        for image in additional_image_links:
+            image_url = image.get('href')
+            image = Image(image_url=image_url)
+            image.save()
+            product.images.add(image)
 
         price_els = page.xpath('.//div[@class="product-info"]//div[@class="price"]')
         if len(price_els):
