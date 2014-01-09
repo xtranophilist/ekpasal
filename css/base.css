@@ -39,3 +39,7 @@ header nav .inline-list > li:last-child {
 header nav .inline-list, header nav .inline-list li a {
     margin: 0;
 }
+
+.original-price{
+    text-decoration: line-through;
+}
