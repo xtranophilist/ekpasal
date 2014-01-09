@@ -142,7 +142,7 @@ class Product(models.Model):
 
 
 class ProductInfo(models.Model):
-    product = models.ForeignKey(Product)
+    product = models.ForeignKey(Product, related_name='info')
     code = models.CharField(max_length=100, null=True)
     # rating
     # reviews

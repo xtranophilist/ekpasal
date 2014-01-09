@@ -140,7 +140,7 @@ AUTH_USER_MODEL = 'users.User'
 
 THUMBNAIL_ALIASES = {
     '': {
-        'avatar': {'size': (50, 50), 'crop': False},
+        'grid': {'size': (300, 300), 'crop': False},
     },
 }
 

@@ -7,12 +7,19 @@
     <span>{{ category }}</span>
 {% endblock %}
 
+{% load thumbnail %}
+{% load custom %}
+
 {% block content %}
 
     {% for product in category.products.all %}
-<div class="product-block">
-{{ product.images.all.first.image_file }}
-</div>
+        <div class="product-block">
+            <a href="{% url 'view_product' product.slug %}">
+                <img src="{{ product.images.all.first.image_file|thumbnail_url:'grid' }}" alt=""/>
+                {{ product.name }} | {{ product.info.all|get_starting_price}}
+            </a>
+
+        </div>
 
 
     {% endfor %}
