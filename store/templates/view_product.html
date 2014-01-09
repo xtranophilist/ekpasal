@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <span>{{ product.name }}</span>
+{% endblock %}
+
+{% load thumbnail %}
+
+{% block content %}
+
+    {{ product.name }}
+
+{% endblock %}
