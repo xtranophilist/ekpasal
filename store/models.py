@@ -109,6 +109,14 @@ class Image(models.Model):
         self.get_remote_image()
         super(Image, self).save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        # You have to prepare what you need before delete the model
+        storage, path = self.image_file.storage, self.image_file.path
+        # Delete the model before the file
+        super(Image, self).delete(*args, **kwargs)
+        # Delete the file after the model
+        storage.delete(path)
+
 
 class Product(models.Model):
     name = models.CharField(max_length=254)
