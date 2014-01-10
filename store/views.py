@@ -20,4 +20,8 @@ def view_category(request, slug):
 
 def view_product(request, slug):
     product = Product.objects.get(slug=slug)
-    return render(request, 'view_product.html', {'product': product})
+    data = {
+        'product': product.serialize(),
+        'type': 'product',
+    }
+    return render(request, 'base.html', {'data': data})

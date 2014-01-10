@@ -56,6 +56,8 @@
 <nav class="breadcrumbs">
     {% block breadcrumbs %}
         <a href="/">Dashboard</a>
+        <a href="/category/clothing-jewelry">Clothing & Jewelry</a>
+        <a href="/category/men">Men</a>
     {% endblock %}
 </nav>
 
@@ -88,7 +90,8 @@
 
     <div class="large-9 column" role="content">
         {% block content %}
-            <div id="grid">
+            <div id="grid" data-bind="if: type()=='category'">
+                <!--ko flash: true-->
                 <!-- ko foreach: products -->
                 <div class="product-block">
                     <a data-bind="attr: {'href': '/' + slug, 'title': description_text()}">
@@ -99,9 +102,39 @@
 
                 </div>
                 <!-- /ko -->
+                <!-- /ko -->
             </div>
-            <div id="product-info">
+            <div id="product-detail" data-bind="flash: true, if: $root.type()=='product'">
+                <!--ko flash: true-->
+                <div data-bind="with: product">
+                    <h1 data-bind="text: name"></h1>
+                    <img data-bind="attr: {'src': images[0]}"/>
 
+
+                    <div class="product-info" data-bind="foreach: info">
+                        <div>
+                            Price :
+                            <!-- ko if original_price -->
+                            <span data-bind="text: 'NPR'"></span>
+                            <span class="original-price" data-bind="text: original_price"></span>
+                            <!-- /ko -->
+                            <span data-bind="text: price"></span>
+                        </div>
+                        <div>Availability: <span data-bind="text: get_availability()"></span></div>
+
+                        <a data-bind="attr: {'href': purchase_url}" target="_blank" class="button">View/Purchase
+                            from <span data-bind="text: store"></span></a>
+
+                    </div>
+
+
+                    <h3>Description:</h3>
+
+                    <div class="description">
+                        {{ product.description|safe }}
+                    </div>
+                </div>
+                <!-- /ko -->
             </div>
         {% endblock %}
     </div>

@@ -183,5 +183,10 @@ class ProductInfo(models.Model):
 
     def serialize(self):
         return {
-            'price': self.price
+            'price': self.price,
+            'original_price': self.original_price,
+            'availability': self.availability,
+            'purchase_url': self.purchase_url,
+            'store': self.store.name,
+
         }
