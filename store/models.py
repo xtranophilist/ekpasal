@@ -150,10 +150,19 @@ class Product(models.Model):
         super(Product, self).save(*args, **kwargs)
 
     def serialize(self):
-        return {
+        dct = {
             'name': self.name,
             'description': self.description,
+            'slug': self.slug,
+            'info': [],
+            'images': [],
         }
+        for info in self.info.all():
+            dct['info'].append(info.serialize())
+        for image in self.images.all():
+            dct['images'].append(image.image_file.url)
+        return dct
+
 
 
 class ProductInfo(models.Model):
@@ -171,3 +180,8 @@ class ProductInfo(models.Model):
 
     def __str__(self):
         return self.product.name + ' on ' + self.store.name
+
+    def serialize(self):
+        return {
+            'price': self.price
+        }
