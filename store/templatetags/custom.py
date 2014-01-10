@@ -32,6 +32,7 @@ def parse_availability(availability):
 
 def handler(obj):
     from django.db.models.fields.files import ImageFieldFile
+
     if hasattr(obj, 'isoformat'):
         return obj.isoformat()
     elif isinstance(obj, Model):
@@ -39,7 +40,11 @@ def handler(obj):
         del model_dict['_state']
         return mark_safe(json.dumps(model_dict))
     elif isinstance(obj, ImageFieldFile):
-        return obj.url
+        try:
+            url = obj.url
+            return url
+        except:
+            return ''
     else:
         raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
 
