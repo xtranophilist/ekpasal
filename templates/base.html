@@ -6,6 +6,8 @@
 
     <title>{% block title %}{% endblock %} | EkPasal.com</title>
 
+    {% load custom %}
+
     <link rel="stylesheet" href="{{ STATIC_URL }}css/normalize.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/foundation.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css">
@@ -15,11 +17,19 @@
 
 
     <script src="{{ STATIC_URL }}js/vendor/custom.modernizr.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/knockout.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/sammy.js"></script>
+
+    <script>
+        data =
+        {{ data|jsonify }}
+    </script>
 
     {% block extrahead %}{% endblock %}
 
 </head>
 <body>
+
 
 <!-- Nav Bar -->
 
@@ -75,6 +85,21 @@
 
     <div class="large-9 column" role="content">
         {% block content %}
+            <div id="grid">
+                <!-- ko foreach: products -->
+                <div class="product-block">
+                    <a data-bind="attr: {'href': '/' + slug}">
+                        <img data-bind="attr: {'src': image}"/>
+                        <span data-bind="text: name"></span> | <span data-bind="text: currency"></span> <span
+                            data-bind="text: starting_price()"></span>
+                    </a>
+
+                </div>
+                <!-- /ko -->
+            </div>
+            <div id="product-info">
+
+            </div>
         {% endblock %}
     </div>
     <!-- End Main Content -->

@@ -7,7 +7,15 @@ def list_categories(request):
 
 def view_category(request, slug):
     category = Category.objects.get(slug=slug)
-    return render(request, 'view_category.html', {'category': category})
+    products = []
+    for product in category.products.all():
+        products.append(product.serialize())
+    data = {
+        'products': products,
+        'type': 'category',
+        'source': category.serialize()
+    }
+    return render(request, 'base.html', {'data': data})
 
 
 def view_product(request, slug):
