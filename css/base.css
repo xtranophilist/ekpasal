@@ -43,3 +43,23 @@ header nav .inline-list, header nav .inline-list li a {
 .original-price{
     text-decoration: line-through;
 }
+
+.product-block img{
+    width: 12em;
+    height: 18em;
+    display: block;
+    margin: 0 auto;
+
+}
+
+.product-block{
+    float: left;
+    /*overflow: hidden;*/
+    width: 13em;
+    border: 1px solid #F6F6F6;
+    margin: 1em;
+    text-align: center;
+    padding-bottom: 0.5em;
+    display: inline-block;
+
+}
