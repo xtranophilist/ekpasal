@@ -91,6 +91,15 @@ class Category(MPTTModel):
         unique_slugify(self, self.name)
         super(Category, self).save(*args, **kwargs)
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'slug': self.slug,
+            'description': self.description,
+            'image': self.image,
+        }
+
 
 class Image(models.Model):
     image_file = models.ImageField(upload_to='images/products/', null=True)
@@ -139,6 +148,12 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         unique_slugify(self, self.name)
         super(Product, self).save(*args, **kwargs)
+
+    def serialize(self):
+        return {
+            'name': self.name,
+            'description': self.description,
+        }
 
 
 class ProductInfo(models.Model):
