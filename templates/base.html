@@ -19,9 +19,12 @@
     <script src="{{ STATIC_URL }}js/vendor/custom.modernizr.js"></script>
     <script src="{{ STATIC_URL }}js/vendor/knockout.js"></script>
     <script src="{{ STATIC_URL }}js/vendor/sammy.js"></script>
+    <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
+    <script src="{{ STATIC_URL }}js/base.js"></script>
+    <script src="{{ STATIC_URL }}js/store.js"></script>
 
     <script>
-        data =
+        ko_data =
         {{ data|jsonify }}
     </script>
 
@@ -88,9 +91,9 @@
             <div id="grid">
                 <!-- ko foreach: products -->
                 <div class="product-block">
-                    <a data-bind="attr: {'href': '/' + slug}">
-                        <img data-bind="attr: {'src': image}"/>
-                        <span data-bind="text: name"></span> | <span data-bind="text: currency"></span> <span
+                    <a data-bind="attr: {'href': '/' + slug, 'title': description_text()}">
+                        <img data-bind="attr: {'src': images[0]}"/>
+                        <span data-bind="text: name"></span> | <span data-bind="text: 'NPR'"></span> <span
                             data-bind="text: starting_price()"></span>
                     </a>
 
