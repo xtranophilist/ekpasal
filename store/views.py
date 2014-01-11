@@ -14,6 +14,9 @@ def view_category(request, slug):
     products = []
     for product in category.products.all():
         products.append(product.serialize())
+    for descendant in category.get_descendants():
+        for product in descendant.products.all():
+            products.append(product.serialize())
     data = {
         'products': products,
         'type': 'category',
