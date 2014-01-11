@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width"/>
 
-    <title>{% block title %}{% endblock %} | EkPasal.com</title>
+    <title>{{ data.title }} | EkPasal.com</title>
 
     {% load custom %}
 
@@ -18,7 +18,7 @@
 
     <script src="{{ STATIC_URL }}js/vendor/custom.modernizr.js"></script>
     <script src="{{ STATIC_URL }}js/vendor/knockout.js"></script>
-    <script src="{{ STATIC_URL }}js/vendor/sammy.js"></script>
+    <script src="{{ STATIC_URL }}js/vendor/sammy-latest.min.js"></script>
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
     <script src="{{ STATIC_URL }}js/base.js"></script>
     <script src="{{ STATIC_URL }}js/store.js"></script>
@@ -91,8 +91,8 @@
     <div class="large-9 column" role="content">
         {% block content %}
             <div id="grid" data-bind="if: type()=='category'">
-                <!--ko flash: true-->
                 <!-- ko foreach: products -->
+
                 <div class="product-block">
                     <a data-bind="attr: {'href': '/' + slug, 'title': description_text()}">
                         <img data-bind="attr: {'src': images[0]}"/>
@@ -101,7 +101,6 @@
                     </a>
 
                 </div>
-                <!-- /ko -->
                 <!-- /ko -->
             </div>
             <div id="product-detail" data-bind="flash: true, if: $root.type()=='product'">

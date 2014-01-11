@@ -17,7 +17,8 @@ def view_category(request, slug):
     data = {
         'products': products,
         'type': 'category',
-        'source': category.serialize()
+        'source': category.serialize(),
+        'title': category.name,
     }
     return data
 
@@ -28,5 +29,6 @@ def view_product(request, slug):
     data = {
         'product': product.serialize(),
         'type': 'product',
+        'title': product.name,
     }
     return data
