@@ -5,3 +5,7 @@ Object.size = function (obj) {
     }
     return size;
 };
+
+function set_title(title){
+    document.title = title + ' | EkPasal.com';
+}

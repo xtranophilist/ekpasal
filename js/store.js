@@ -9,13 +9,26 @@ function StoreVM(data) {
 
     self.type = ko.observable(data['type']);
 
+
+
+    self.title = ko.observable('Search across e-commerce sites | EkPasal.com');
+
+    self.title.subscribe(set_title);
+
     self.fill_category = function (data) {
         if (data.products) {
+            self.type('none');
             self.products = ko.observableArray(ko.utils.arrayMap(data.products, function (item) {
                 return new ProductVM(item);
             }));
             self.category = ko.observable(data.source.slug);
+            self.type('category');
+            self.title(data.title);
         }
+    }
+
+    if (self.type() == 'category') {
+        self.fill_category(data);
     }
 
     if (self.type() == 'product') {
@@ -24,9 +37,6 @@ function StoreVM(data) {
         self.product = ko.observable();
     }
 
-    if (self.type() == 'category') {
-        self.fill_category(data);
-    }
 
     var sammy = Sammy(function () {
         this.get('/category/:category_slug', function () {
@@ -40,9 +50,7 @@ function StoreVM(data) {
                 }
             }
             $.get('/category/' + this.params.category_slug, function (data) {
-                console.log(data);
                 self.fill_category(data);
-                self.type('category');
             });
 
         });
@@ -52,11 +60,10 @@ function StoreVM(data) {
                 return;
             var selected_obj = $.grep(self.products(), function (i) {
                 return slug == i.slug;
-//                return [1];
             })[0];
             self.product(selected_obj);
             self.type('product');
-
+            self.title(selected_obj.name)
         });
     });
     sammy.raise_errors = true;
@@ -93,12 +100,6 @@ function ProductVM(data) {
         return r;
     }
 
-    self.clicked = function () {
-//        vm = new StoreVM({'type': 'product', 'product': self});
-//        ko.cleanNode(document);
-//        ko.applyBindings(vm);
-
-    }
 }
 
 function ProductInfoVM(data) {
