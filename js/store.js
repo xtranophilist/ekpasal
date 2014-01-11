@@ -7,15 +7,16 @@ function StoreVM(data) {
 
     var self = this;
 
-    if (data.products) {
-        self.products = ko.observableArray(ko.utils.arrayMap(data.products, function (item) {
-            return new ProductVM(item);
-        }));
-        self.category = ko.observable(data.source.slug);
-
-    }
-
     self.type = ko.observable(data['type']);
+
+    self.fill_category = function (data) {
+        if (data.products) {
+            self.products = ko.observableArray(ko.utils.arrayMap(data.products, function (item) {
+                return new ProductVM(item);
+            }));
+            self.category = ko.observable(data.source.slug);
+        }
+    }
 
     if (self.type() == 'product') {
         self.product = ko.observable(new ProductVM(data['product']));
@@ -23,16 +24,32 @@ function StoreVM(data) {
         self.product = ko.observable();
     }
 
-    Sammy(function () {
+    if (self.type() == 'category') {
+        self.fill_category(data);
+    }
+
+    var sammy = Sammy(function () {
         this.get('/category/:category_slug', function () {
-            self.type('category');
             //if the current category is requested don't do anything
-            if (this.params.category_slug == self.category())
-                return;
-            console.log(this.params.category_slug);
+            if (typeof self.category == 'function') {
+                if (self.type == 'category' && this.params.category_slug == self.category())
+                    return;
+                if (this.params.category_slug == self.category()) {
+                    self.type('category');
+                    return;
+                }
+            }
+            $.get('/category/' + this.params.category_slug, function (data) {
+                console.log(data);
+                self.fill_category(data);
+                self.type('category');
+            });
+
         });
         this.get('/:product_slug', function () {
             var slug = this.params.product_slug;
+            if (self.type() == 'product' && slug == self.product().slug)
+                return;
             var selected_obj = $.grep(self.products(), function (i) {
                 return slug == i.slug;
 //                return [1];
@@ -41,7 +58,9 @@ function StoreVM(data) {
             self.type('product');
 
         });
-    }).run();
+    });
+    sammy.raise_errors = true;
+    sammy.run();
 
 }
 
