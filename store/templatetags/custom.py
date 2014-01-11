@@ -3,6 +3,7 @@ from django.db.models import Model
 from django.template import Library
 from django import template
 from django.utils.safestring import mark_safe
+from app.libr import json_handler
 
 register = Library()
 
@@ -30,25 +31,6 @@ def parse_availability(availability):
         return availability
 
 
-def handler(obj):
-    from django.db.models.fields.files import ImageFieldFile
-
-    if hasattr(obj, 'isoformat'):
-        return obj.isoformat()
-    elif isinstance(obj, Model):
-        model_dict = object.__dict__
-        del model_dict['_state']
-        return mark_safe(json.dumps(model_dict))
-    elif isinstance(obj, ImageFieldFile):
-        try:
-            url = obj.url
-            return url
-        except:
-            return ''
-    else:
-        raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
-
-
 @register.filter
 def jsonify(object):
     # if isinstance(object, QuerySet):
@@ -57,4 +39,4 @@ def jsonify(object):
         model_dict = object.__dict__
         del model_dict['_state']
         return mark_safe(json.dumps(model_dict))
-    return mark_safe(json.dumps(object, default=handler))
+    return mark_safe(json.dumps(object, default=json_handler))

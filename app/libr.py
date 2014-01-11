@@ -1,3 +1,8 @@
+import json
+from django.db.models import Model
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.utils.safestring import mark_safe
 import re
 from django.template.defaultfilters import slugify
 
@@ -70,3 +75,36 @@ def _slug_strip(value, separator='-'):
             re_sep = re.escape(separator)
         value = re.sub(r'^%s+|%s+$' % (re_sep, re_sep), '', value)
     return value
+
+
+def json_handler(obj):
+    from django.db.models.fields.files import ImageFieldFile
+
+    if hasattr(obj, 'isoformat'):
+        return obj.isoformat()
+    elif isinstance(obj, Model):
+        model_dict = object.__dict__
+        del model_dict['_state']
+        return mark_safe(json.dumps(model_dict))
+    elif isinstance(obj, ImageFieldFile):
+        try:
+            url = obj.url
+            return url
+        except:
+            return ''
+    else:
+        raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
+
+
+def markup_or_json(template):
+    def actual_decorator(func):
+        def inner(*args, **kwargs):
+            request = args[0]
+            if request.is_ajax():
+                return HttpResponse(json.dumps(func(*args, **kwargs), default=json_handler), mimetype="application/json")
+            else:
+                return render(request, template, {'data': func(*args, **kwargs)})
+
+        return inner
+
+    return actual_decorator
