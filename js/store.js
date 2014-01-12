@@ -3,23 +3,30 @@ $(document).ready(function () {
     ko.applyBindings(vm);
 });
 
-function StoreVM(data) {
-
+function CategoryVM(data){
     var self = this;
+    for (var k in data) {
+        self[k] = ko.observable(data[k]);
+    }
+}
 
+function StoreVM(data) {
+    var self = this;
     self.type = ko.observable(data['type']);
-
-
-
     self.title = ko.observable('Search across e-commerce sites | EkPasal.com');
-
     self.title.subscribe(set_title);
+    self.categories = ko.observableArray();
 
     self.fill_category = function (data) {
+
         if (data.products) {
             self.type('none');
             self.products = ko.observableArray(ko.utils.arrayMap(data.products, function (item) {
                 return new ProductVM(item);
+            }));
+
+            self.categories(ko.utils.arrayMap(data['source']['categories'], function (item) {
+                return new CategoryVM(item);
             }));
             self.category = ko.observable(data.source.slug);
             self.type('category');
@@ -27,12 +34,14 @@ function StoreVM(data) {
         }
     }
 
+
     if (self.type() == 'category') {
         self.fill_category(data);
     }
 
     if (self.type() == 'product') {
         self.product = ko.observable(new ProductVM(data['product']));
+        self.categories = ko.observableArray(data['product']['categories'])
     } else {
         self.product = ko.observable();
     }
