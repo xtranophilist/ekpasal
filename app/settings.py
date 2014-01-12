@@ -85,17 +85,15 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.admin',
 
     'south',
     'mptt',
     'easy_thumbnails',
-
+    'haystack',
 
     'users',
     'store',
-
-
-    'django.contrib.admin',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
