@@ -3,7 +3,7 @@ from lxml import html
 from lxml.etree import tostring
 import re
 
-from store.models import Product, Category, Store, ProductInfo, Currency, Image
+from store.models import Product, Category, Store, Currency, Image
 
 
 class Yeskantipur():
@@ -90,16 +90,48 @@ class Yeskantipur():
         print 'Writing product : ' + name
 
         try:
-            product = Product.objects.get(categories=category, name=name)
+            product = Product.objects.get(categories=category, name=name, store=self.store)
         except Product.DoesNotExist:
-            product = Product(name=name)
-            product.save()
-        product.categories.add(category)
+            product = Product(name=name, store=self.store)
+
+        # try:
+        #     product_info = ProductInfo.objects.get(product=product, store=self.store)
+        # except ProductInfo.DoesNotExist:
+        #     product_info = ProductInfo(product=product, store=self.store)
+
+        price_els = page.xpath('.//div[@class="product-info"]//div[@class="price"]')
+        if len(price_els):
+            price_el = price_els[0]
+        else:
+            return
+        old_price_els = price_el.xpath('./span[@class="price-old"]')
+        if len(old_price_els):
+            old_price_el = old_price_els[0]
+            old_price_content = old_price_el.text_content()
+            old_price = float(re.search('Rs\.([\d,\.]+)', old_price_content).group(1).replace(',', ''))
+            product.original_price = old_price
+            new_price_els = price_el.xpath('./span[@class="price-new"]')
+            new_price_el = new_price_els[0]
+            new_price_content = new_price_el.text_content()
+            new_price = float(re.search('Rs\.([\d,\.]+)', new_price_content).group(1).replace(',', ''))
+            product.price = new_price
+        else:
+            price_with_comma = re.search('Price:\s+Rs\.([\d,\.]+)', price_el.text_content()).group(1)
+            product.price = float(price_with_comma.replace(',', ''))
+
+        product.currency = self.currency
+        description_text = page.xpath('.//div[@class="product-info"]//div[@class="description"]')[0].text_content()
+        product.code = re.search('Product Code:\s(.+)\\n', description_text).group(1)
+        availability_text = re.search('Availability:\s(.+)', description_text).group(1)
+
+        # TODO: get vendor
+        if availability_text == 'In Stock':
+            product.availability = 0
+        description_el = page.xpath('//div[@id="tab-description"]')[0]
+        product.description = tostring(description_el)
+        product.purchase_url = url
         product.save()
-        try:
-            product_info = ProductInfo.objects.get(product=product, store=self.store)
-        except ProductInfo.DoesNotExist:
-            product_info = ProductInfo(product=product, store=self.store)
+        product.categories.add(category)
         # TODO: write only if images are new
         # delete existing images first
         images = product.images.all()
@@ -117,40 +149,4 @@ class Yeskantipur():
             image = Image(image_url=image_url)
             image.save()
             product.images.add(image)
-
-        price_els = page.xpath('.//div[@class="product-info"]//div[@class="price"]')
-        if len(price_els):
-            price_el = price_els[0]
-        else:
-            return
-        old_price_els = price_el.xpath('./span[@class="price-old"]')
-        if len(old_price_els):
-            old_price_el = old_price_els[0]
-            old_price_content = old_price_el.text_content()
-            old_price = float(re.search('Rs\.([\d,\.]+)', old_price_content).group(1).replace(',', ''))
-            product_info.original_price = old_price
-            new_price_els = price_el.xpath('./span[@class="price-new"]')
-            new_price_el = new_price_els[0]
-            new_price_content = new_price_el.text_content()
-            new_price = float(re.search('Rs\.([\d,\.]+)', new_price_content).group(1).replace(',', ''))
-            product_info.price = new_price
-        else:
-            price_with_comma = re.search('Price:\s+Rs\.([\d,\.]+)', price_el.text_content()).group(1)
-            product_info.price = float(price_with_comma.replace(',', ''))
-
-        product_info.currency = self.currency
-        description_text = page.xpath('.//div[@class="product-info"]//div[@class="description"]')[0].text_content()
-        product_info.product_code = re.search('Product Code:\s(.+)\\n', description_text).group(1)
-        availability_text = re.search('Availability:\s(.+)', description_text).group(1)
-        # get vendor
-        if availability_text == 'In Stock':
-            product_info.availability = 0
-        description_el = page.xpath('//div[@id="tab-description"]')[0]
-        product.description = tostring(description_el)
-        product_info.purchase_url = url
-        product.save()
-        product_info.save()
-
-        # import bpdb
-        #
-        # bpdb.set_trace()
+            # product.save()
