@@ -58,7 +58,7 @@
         <a href="/">Home</a>
 
         <!-- ko foreach: $root.categories -->
-        <a data-bind="attr: {'href':'/category/'+slug()}, text: name()"></a>
+        <a data-bind="attr: {'href':'/category/'+slug}, text: name"></a>
         <!-- /ko -->
 
         <!-- ko if: type()=='product' -->
@@ -103,7 +103,7 @@
                     <a data-bind="attr: {'href': '/' + slug, 'title': description_text()}">
                         <img data-bind="attr: {'src': images[0]}"/>
                         <span data-bind="text: name"></span> | <span data-bind="text: 'NPR'"></span> <span
-                            data-bind="text: starting_price()"></span>
+                            data-bind="text: price"></span>
                     </a>
 
                 </div>
@@ -117,23 +117,23 @@
                     <img data-bind="attr: {'src': images[0]}" src="{{ data.product.images.0 }}"/>
 
 
-                    <div class="product-info" data-bind="foreach: info">
+                    <div class="product-info">
                         <div>
                             Price :
                             <!-- ko if original_price -->
                             <span data-bind="text: 'NPR'"></span>
                             <span class="original-price"
-                                  data-bind="text: original_price">{{ data.product.info.0.original_price }}</span>
+                                  data-bind="text: original_price">{{ data.product.original_price }}</span>
                             <!-- /ko -->
-                            <span data-bind="text: price">{{ data.product.info.0.price }}</span>
+                            <span data-bind="text: price">{{ data.product.price }}</span>
                         </div>
                         <div>Availability: <span
-                                data-bind="text: get_availability()">{{ data.product.info.0.get_availability }}</span>
+                                data-bind="text: get_availability()">{{ data.product.get_availability }}</span>
                         </div>
 
                         <a data-bind="attr: {'href': purchase_url}" target="_blank" class="button"
-                           href="{{ data.product.info.0.purchase_url }}">View/Purchase
-                            from <span data-bind="text: store">{{ data.product.info.0.store }}</span></a>
+                           href="{{ data.product.purchase_url }}">View/Purchase
+                            from <span data-bind="text: store">{{ data.product.store }}</span></a>
 
                     </div>
 
