@@ -1,14 +1,7 @@
 $(document).ready(function () {
-    vm = new StoreVM(ko_data);
+    window.vm = new StoreVM(ko_data);
     ko.applyBindings(vm);
 });
-
-function CategoryVM(data){
-    var self = this;
-    for (var k in data) {
-        self[k] = ko.observable(data[k]);
-    }
-}
 
 function StoreVM(data) {
     var self = this;
@@ -25,9 +18,11 @@ function StoreVM(data) {
                 return new ProductVM(item);
             }));
 
-            self.categories(ko.utils.arrayMap(data['source']['categories'], function (item) {
-                return new CategoryVM(item);
-            }));
+//            self.categories(ko.utils.arrayMap(data['source']['categories'], function (item) {
+//                return new CategoryVM(item);
+//            }));
+
+            self.categories(data['source']['categories']);
             self.category = ko.observable(data.source.slug);
             self.type('category');
             self.title(data.title);
@@ -96,6 +91,16 @@ function ProductVM(data) {
         return text.replace(/\s+/g, ' ').trim();
     }
 
+    self.get_availability = function () {
+        /** @namespace self.availability */
+        if (self.availability == 0)
+            return 'In Stock';
+        else if (self.availability == -1)
+            return 'Out of Stock';
+        else
+            return self.availability
+    }
+
 //    self.info = ko.observableArray(ko.utils.arrayMap(data.info, function (item) {
 //        return new ProductInfoVM(item);
 //    }));
@@ -109,21 +114,4 @@ function ProductVM(data) {
 //        return r;
 //    }
 
-    self.get_availability = function () {
-        /** @namespace self.availability */
-        if (self.availability == 0)
-            return 'In Stock';
-        else if (self.availability == -1)
-            return 'Out of Stock';
-        else
-            return self.availability
-    }
-
 }
-
-//function ProductInfoVM(data) {
-//    var self = this;
-//    for (var k in data) {
-//        self[k] = data[k];
-//    }
-//}
