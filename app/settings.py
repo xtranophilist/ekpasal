@@ -90,7 +90,7 @@ INSTALLED_APPS = (
     'south',
     'mptt',
     'easy_thumbnails',
-    'haystack',
+    # 'haystack',
 
     'users',
     'store',

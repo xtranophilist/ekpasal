@@ -140,41 +140,12 @@ class Product(models.Model):
     images = models.ManyToManyField(Image, related_name='products')
     categories = models.ManyToManyField(Category, related_name='products')
     attributes = JSONField(null=True)
-    stores = models.ManyToManyField(Store, through='ProductInfo', related_name='products')
+    # stores = models.ManyToManyField(Store, through='ProductInfo', related_name='products')
     # new = models.BooleanField(default=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     views = models.PositiveIntegerField(default=0)
 
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        unique_slugify(self, self.name)
-        super(Product, self).save(*args, **kwargs)
-
-    def get_all_categories(self):
-        return list(self.categories.all()[0].get_ancestors(include_self=True))
-
-    def serialize(self):
-        dct = {
-            'name': self.name,
-            'description': self.description,
-            'slug': self.slug,
-            'info': [],
-            'images': [],
-            'categories': self.get_all_categories(),
-        }
-        for info in self.info.all():
-            dct['info'].append(info.serialize())
-        for image in self.images.all():
-            dct['images'].append(image.image_file.url)
-        return dct
-
-
-
-class ProductInfo(models.Model):
-    product = models.ForeignKey(Product, related_name='info')
     code = models.CharField(max_length=100, null=True)
     # rating
     # reviews
@@ -186,6 +157,13 @@ class ProductInfo(models.Model):
     vendor = models.ForeignKey(Vendor, null=True)
     purchase_url = models.CharField(max_length=254)
 
+    def __str__(self):
+        return self.product.name + ' on ' + self.store.name
+
+    def save(self, *args, **kwargs):
+        unique_slugify(self, self.name)
+        super(Product, self).save(*args, **kwargs)
+
     def get_availability(self):
         if self.availability == 0:
             return 'In Stock'
@@ -193,11 +171,17 @@ class ProductInfo(models.Model):
             return 'Out of Stock'
         return self.availability
 
-    def __str__(self):
-        return self.product.name + ' on ' + self.store.name
+    def get_all_categories(self):
+        return list(self.categories.all()[0].get_ancestors(include_self=True))
 
     def serialize(self):
-        return {
+        dct = {
+            'name': self.name,
+            'description': self.description,
+            'slug': self.slug,
+            # 'info': [],
+            'images': [],
+            'categories': self.get_all_categories(),
             'price': self.price,
             'original_price': self.original_price,
             'availability': self.availability,
@@ -205,3 +189,17 @@ class ProductInfo(models.Model):
             'store': self.store.name,
             'get_availability': self.get_availability(),
         }
+        # for info in self.info.all():
+        #     dct['info'].append(info.serialize())
+        for image in self.images.all():
+            dct['images'].append(image.image_file.url)
+        return dct
+
+
+# class ProductInfo(models.Model):
+#     # product = models.ForeignKey(Product, related_name='info')
+#
+#     def serialize(self):
+#         return {
+#
+#         }
