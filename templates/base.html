@@ -56,8 +56,14 @@
 <nav class="breadcrumbs">
     {% block breadcrumbs %}
         <a href="/">Home</a>
-        <a href="/category/clothing-jewelry">Clothing & Jewelry</a>
-        <a href="/category/men">Men</a>
+
+        <!-- ko foreach: $root.categories -->
+        <a data-bind="attr: {'href':'/category/'+slug()}, text: name()"></a>
+        <!-- /ko -->
+
+        <!-- ko if: type()=='product' -->
+        <span data-bind="text: product().name"></span>
+        <!-- /ko -->
     {% endblock %}
 </nav>
 
@@ -103,7 +109,7 @@
                 </div>
                 <!-- /ko -->
             </div>
-            {{ data }}
+            {#            {{ data }}#}
             <div id="product-detail" data-bind="flash: true, if: $root.type()=='product'">
                 <!--ko flash: true-->
                 <div data-bind="with: product">
@@ -116,13 +122,17 @@
                             Price :
                             <!-- ko if original_price -->
                             <span data-bind="text: 'NPR'"></span>
-                            <span class="original-price" data-bind="text: original_price">{{ data.product.info.0.original_price }}</span>
+                            <span class="original-price"
+                                  data-bind="text: original_price">{{ data.product.info.0.original_price }}</span>
                             <!-- /ko -->
                             <span data-bind="text: price">{{ data.product.info.0.price }}</span>
                         </div>
-                        <div>Availability: <span data-bind="text: get_availability()">{{ data.product.info.0.get_availability }}</span></div>
+                        <div>Availability: <span
+                                data-bind="text: get_availability()">{{ data.product.info.0.get_availability }}</span>
+                        </div>
 
-                        <a data-bind="attr: {'href': purchase_url}" target="_blank" class="button" href="{{ data.product.info.0.purchase_url }}">View/Purchase
+                        <a data-bind="attr: {'href': purchase_url}" target="_blank" class="button"
+                           href="{{ data.product.info.0.purchase_url }}">View/Purchase
                             from <span data-bind="text: store">{{ data.product.info.0.store }}</span></a>
 
                     </div>
