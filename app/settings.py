@@ -90,7 +90,7 @@ INSTALLED_APPS = (
     'south',
     'mptt',
     'easy_thumbnails',
-    # 'haystack',
+    'haystack',
 
     'users',
     'store',
@@ -143,3 +143,10 @@ THUMBNAIL_ALIASES = {
 }
 
 THUMBNAIL_DEBUG = True
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://127.0.0.1:8983/solr'
+    },
+}
