@@ -91,6 +91,9 @@ class Category(MPTTModel):
         unique_slugify(self, self.name)
         super(Category, self).save(*args, **kwargs)
 
+    def get_all_categories(self):
+        return list(self.get_ancestors(include_self=True))
+
     def serialize(self):
         return {
             'id': self.id,
@@ -98,6 +101,7 @@ class Category(MPTTModel):
             'slug': self.slug,
             'description': self.description,
             'image': self.image,
+            'categories': self.get_all_categories(),
         }
 
 
@@ -149,6 +153,9 @@ class Product(models.Model):
         unique_slugify(self, self.name)
         super(Product, self).save(*args, **kwargs)
 
+    def get_all_categories(self):
+        return list(self.categories.all()[0].get_ancestors(include_self=True))
+
     def serialize(self):
         dct = {
             'name': self.name,
@@ -156,12 +163,14 @@ class Product(models.Model):
             'slug': self.slug,
             'info': [],
             'images': [],
+            'categories': self.get_all_categories(),
         }
         for info in self.info.all():
             dct['info'].append(info.serialize())
         for image in self.images.all():
             dct['images'].append(image.image_file.url)
         return dct
+
 
 
 class ProductInfo(models.Model):
