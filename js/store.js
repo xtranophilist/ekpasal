@@ -84,7 +84,7 @@ function ProductVM(data) {
         div.innerHTML = html;
         var text = div.textContent || div.innerText || "";
         //strip multiple whitespace with single and return
-        return text.replace(/\s+/g, ' ');
+        return text.replace(/\s+/g, ' ').trim();
     }
 
     self.info = ko.observableArray(ko.utils.arrayMap(data.info, function (item) {
