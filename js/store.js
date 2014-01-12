@@ -96,26 +96,18 @@ function ProductVM(data) {
         return text.replace(/\s+/g, ' ').trim();
     }
 
-    self.info = ko.observableArray(ko.utils.arrayMap(data.info, function (item) {
-        return new ProductInfoVM(item);
-    }));
+//    self.info = ko.observableArray(ko.utils.arrayMap(data.info, function (item) {
+//        return new ProductInfoVM(item);
+//    }));
 
-    self.starting_price = function () {
-        var r = self.info()[0].price;
-        for (var i = 1; i < Object.size(self.info()); i++) {
-            if (self.info()[i].price < r)
-                r = self.info()[i].price;
-        }
-        return r;
-    }
-
-}
-
-function ProductInfoVM(data) {
-    var self = this;
-    for (var k in data) {
-        self[k] = data[k];
-    }
+//    self.starting_price = function () {
+//        var r = self.info()[0].price;
+//        for (var i = 1; i < Object.size(self.info()); i++) {
+//            if (self.info()[i].price < r)
+//                r = self.info()[i].price;
+//        }
+//        return r;
+//    }
 
     self.get_availability = function () {
         /** @namespace self.availability */
@@ -126,4 +118,12 @@ function ProductInfoVM(data) {
         else
             return self.availability
     }
+
 }
+
+//function ProductInfoVM(data) {
+//    var self = this;
+//    for (var k in data) {
+//        self[k] = data[k];
+//    }
+//}
