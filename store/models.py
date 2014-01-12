@@ -164,7 +164,6 @@ class Product(models.Model):
         return dct
 
 
-
 class ProductInfo(models.Model):
     product = models.ForeignKey(Product, related_name='info')
     code = models.CharField(max_length=100, null=True)
@@ -178,6 +177,13 @@ class ProductInfo(models.Model):
     vendor = models.ForeignKey(Vendor, null=True)
     purchase_url = models.CharField(max_length=254)
 
+    def get_availability(self):
+        if self.availability == 0:
+            return 'In Stock'
+        elif self.availability == -1:
+            return 'Out of Stock'
+        return self.availability
+
     def __str__(self):
         return self.product.name + ' on ' + self.store.name
 
@@ -188,5 +194,5 @@ class ProductInfo(models.Model):
             'availability': self.availability,
             'purchase_url': self.purchase_url,
             'store': self.store.name,
-
+            'get_availability': self.get_availability(),
         }
