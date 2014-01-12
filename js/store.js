@@ -18,10 +18,6 @@ function StoreVM(data) {
                 return new ProductVM(item);
             }));
 
-//            self.categories(ko.utils.arrayMap(data['source']['categories'], function (item) {
-//                return new CategoryVM(item);
-//            }));
-
             self.categories(data['source']['categories']);
             self.category = ko.observable(data.source.slug);
             self.type('category');
@@ -66,6 +62,7 @@ function StoreVM(data) {
                 return slug == i.slug;
             })[0];
             self.product(selected_obj);
+            self.categories(selected_obj.categories);
             self.type('product');
             self.title(selected_obj.name)
         });
