@@ -32,11 +32,5 @@ def parse_availability(availability):
 
 
 @register.filter
-def jsonify(object):
-    # if isinstance(object, QuerySet):
-    #     return serializers.serialize('json', object)
-    if isinstance(object, Model):
-        model_dict = object.__dict__
-        del model_dict['_state']
-        return mark_safe(json.dumps(model_dict))
-    return mark_safe(json.dumps(object, default=json_handler))
+def jsonify(obj):
+    return mark_safe(json.dumps(obj, default=json_handler))

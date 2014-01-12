@@ -83,9 +83,9 @@ def json_handler(obj):
     if hasattr(obj, 'isoformat'):
         return obj.isoformat()
     elif isinstance(obj, Model):
-        model_dict = object.__dict__
+        model_dict = obj.__dict__
         del model_dict['_state']
-        return mark_safe(json.dumps(model_dict))
+        return model_dict
     elif isinstance(obj, ImageFieldFile):
         try:
             url = obj.url
@@ -101,7 +101,8 @@ def markup_or_json(template):
         def inner(*args, **kwargs):
             request = args[0]
             if request.is_ajax():
-                return HttpResponse(json.dumps(func(*args, **kwargs), default=json_handler), mimetype="application/json")
+                return HttpResponse(json.dumps(func(*args, **kwargs), default=json_handler),
+                                    mimetype="application/json")
             else:
                 return render(request, template, {'data': func(*args, **kwargs)})
 
