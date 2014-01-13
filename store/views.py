@@ -10,7 +10,7 @@ def list_categories(request):
 
 
 def filter_items(request, items, wrapper=lambda x: x):
-    items_per_page = 13
+    items_per_page = 12
     page = int(request.GET.get('page') or 1)
     # 1 = in stock only, 0 = all, -1 = out of stock only
     stock = request.GET.get('stock') or 1
@@ -37,6 +37,7 @@ def filter_items(request, items, wrapper=lambda x: x):
     data = {
         'products': products,
         'pages': pages,
+        'page': page,
     }
     return data
 

@@ -24,8 +24,7 @@
     <script src="{{ STATIC_URL }}js/store.js"></script>
 
     <script>
-        ko_data =
-        {{ data|jsonify }}
+        ko_data = {{ data|jsonify }}
     </script>
 
     {% block extrahead %}{% endblock %}
@@ -71,6 +70,9 @@
         <!-- ko if: type()=='product' -->
         <span data-bind="text: product().name"></span>
         <!-- /ko -->
+        <div class="right">
+        Page <span data-bind="text: page">{{ data.page }}</span> of <span data-bind="text: pages">{{ data.pages }}</span>
+        </div>
     {% endblock %}
 </nav>
 
