@@ -6,13 +6,26 @@ $(document).ready(function () {
 
 function StoreVM(data) {
     var self = this;
-    self.type = ko.observable(data['type']);
-    self.pages = ko.observable(data['pages']);
-    self.page = ko.observable(data['page']);
+
+    self.keyword = ko.observable();
     self.title = ko.observable('Search across e-commerce sites | EkPasal.com');
     self.title.subscribe(set_title);
     self.categories = ko.observableArray();
-    self.keyword = ko.observable();
+    self.type = ko.observable();
+    self.pages = ko.observable();
+    self.page = ko.observable();
+
+
+    self.fill_generic = function (data) {
+        self.type(data['type']);
+        self.pages(ko.observable(data['pages']));
+        self.page(ko.observable(data['page']));
+        if (data.keyword)
+            self.keyword(data.keyword);
+        self.title(data.title);
+    }
+
+    self.fill_generic(data);
 
 
     self.fill_category = function (data) {
@@ -25,7 +38,7 @@ function StoreVM(data) {
 
             self.categories(data['source']['categories']);
             self.category = ko.observable(data.source.slug);
-            self.type('category');
+            self.fill_generic(data);
             self.title(data.title);
         }
     }
@@ -37,8 +50,8 @@ function StoreVM(data) {
                 return new ProductVM(item);
             }));
             self.type('search');
-            self.keyword(data.keyword);
-            self.title(data.title);
+
+            self.fill_generic(data);
         }
     }
 
