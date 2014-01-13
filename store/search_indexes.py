@@ -7,6 +7,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     # description = indexes.CharField(model_attr='description')
     created_on = indexes.DateTimeField(model_attr='created_on')
     updated_on = indexes.DateTimeField(model_attr='updated_on')
+    price = indexes.FloatField(model_attr='price')
+    availability = indexes.IntegerField(model_attr='availability')
+    store = indexes.CharField(model_attr='store__name')
 
     def get_model(self):
         return Product
