@@ -37,7 +37,6 @@ function StoreVM(data) {
             self.type('search');
             self.keyword(data.keyword);
             self.title(data.title);
-            console.log(data);
         }
     }
 
@@ -125,7 +124,6 @@ function StoreVM(data) {
     sammy.run();
 
     $('#top-search').on('submit', function (e) {
-        console.log($('#search-box').val());
         sammy.setLocation('/search/' + $('#search-box').val());
         return false;
     })
