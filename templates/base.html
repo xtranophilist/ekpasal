@@ -24,7 +24,8 @@
     <script src="{{ STATIC_URL }}js/store.js"></script>
 
     <script>
-        ko_data = {{ data|jsonify }}
+        ko_data =
+        {{ data|jsonify }}
     </script>
 
     {% block extrahead %}{% endblock %}
@@ -63,15 +64,25 @@
     {% block breadcrumbs %}
         <a href="/">Home</a>
 
+        <!-- ko if: type()!='search' -->
         <!-- ko foreach: $root.categories -->
         <a data-bind="attr: {'href':'/category/'+slug}, text: name"></a>
+        <!-- /ko -->
+        <!-- /ko -->
+
+        <!-- ko if: type()=='search' -->
+        <span>Search Results for
+        <span data-bind="text: keyword" class="keyword"></span>
+        </span>
+
         <!-- /ko -->
 
         <!-- ko if: type()=='product' -->
         <span data-bind="text: product().name"></span>
         <!-- /ko -->
         <div class="right">
-        Page <span data-bind="text: page">{{ data.page }}</span> of <span data-bind="text: pages">{{ data.pages }}</span>
+            Page <span data-bind="text: page">{{ data.page }}</span> of <span
+                data-bind="text: pages">{{ data.pages }}</span>
         </div>
     {% endblock %}
 </nav>
