@@ -39,6 +39,8 @@ def view_product(request, slug):
 @markup_or_json('base.html')
 def search(request, keyword):
     products = []
+    if keyword == '':
+        keyword = request.GET.get('q') or ''
     results = SearchQuerySet().filter(content=keyword)
     for result in results:
         product = Product.objects.get(id=result.pk)
