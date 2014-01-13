@@ -49,12 +49,9 @@ header nav .inline-list, header nav .inline-list li a {
     height: 18em;
     display: block;
     margin: 0 auto;
-
 }
 
 .product-block{
-    float: left;
-    /*overflow: hidden;*/
     width: 13em;
     border: 1px solid #F6F6F6;
     margin: 1em;
