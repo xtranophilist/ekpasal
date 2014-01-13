@@ -2,7 +2,6 @@ from django.shortcuts import render
 from store.models import Category, Product
 from app.libr import markup_or_json
 from haystack.query import SearchQuerySet
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def list_categories(request):
@@ -10,8 +9,8 @@ def list_categories(request):
     return render(request, 'list_categories.html', {'categories': categories})
 
 
-def filter_items(request, items):
-    items_per_page = 12
+def filter_items(request, items, wrapper=lambda x: x):
+    items_per_page = 13
     page = int(request.GET.get('page') or 1)
     # 1 = in stock only, 0 = all, -1 = out of stock only
     stock = request.GET.get('stock') or 1
@@ -19,7 +18,7 @@ def filter_items(request, items):
     min_price = request.GET.get('min_price') or 0
     max_price = request.GET.get('max_price') or 100000
     products = []
-    filtered_products = items.filter(price__lt=max_price, price__gt=min_price).select_related()
+    filtered_products = items.filter(price__lt=max_price, price__gt=min_price)
     if store:
         filtered_products = filtered_products.filter(store__name=store)
     if stock == '1' or stock == 1:
@@ -29,7 +28,7 @@ def filter_items(request, items):
     pages = (len(filtered_products) + items_per_page // 2) // items_per_page
     filtered_products = filtered_products[(page - 1) * items_per_page:(page * items_per_page)]
     for product in filtered_products:
-        products.append(product.serialize())
+        products.append(wrapper(product).serialize())
     data = {
         'products': products,
         'pages': pages,
@@ -59,19 +58,19 @@ def view_product(request, slug):
     return data
 
 
+def search_result_to_product(item):
+    return Product.objects.get(id=item.pk)
+
+
 @markup_or_json('base.html')
 def search(request, keyword):
-    products = []
     if keyword == '':
         keyword = request.GET.get('q') or ''
     results = SearchQuerySet().filter(content=keyword)
-    for result in results:
-        product = Product.objects.get(id=result.pk)
-        products.append(product.serialize())
-    data = {
-        'results': products,
-        'type': 'search',
-        'title': 'Search: ' + keyword,
-        'keyword': keyword,
-    }
+    data = filter_items(request, results, search_result_to_product)
+    data['type'] = 'search'
+    data['keyword'] = keyword
+    data['title'] = 'Search: ' + keyword
+    data['results'] = data['products']
+    del data['products']
     return data
