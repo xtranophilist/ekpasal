@@ -38,7 +38,15 @@ def view_product(request, slug):
 
 @markup_or_json('base.html')
 def search(request, keyword):
-    print keyword
+    products = []
     results = SearchQuerySet().filter(content=keyword)
-    import pdb
-    pdb.set_trace()
+    for result in results:
+        product = Product.objects.get(id=result.pk)
+        products.append(product.serialize())
+    data = {
+        'results': products,
+        'type': 'search',
+        'title': 'Search: '+ keyword,
+        'keyword': keyword,
+    }
+    return data

@@ -98,7 +98,18 @@
         {% block content %}
             <div id="grid" data-bind="if: type()=='category'">
                 <!-- ko foreach: products -->
+                <div class="product-block">
+                    <a data-bind="attr: {'href': '/' + slug, 'title': description_text()}">
+                        <img data-bind="attr: {'src': images[0]}"/>
+                        <span data-bind="text: name"></span> | <span data-bind="text: 'NPR'"></span> <span
+                            data-bind="text: price"></span>
+                    </a>
 
+                </div>
+                <!-- /ko -->
+            </div>
+            <div id="grid" data-bind="if: type()=='search'">
+                <!-- ko foreach: results -->
                 <div class="product-block">
                     <a data-bind="attr: {'href': '/' + slug, 'title': description_text()}">
                         <img data-bind="attr: {'src': images[0]}"/>

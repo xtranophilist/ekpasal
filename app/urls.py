@@ -12,6 +12,6 @@ urlpatterns = patterns('',
                        # url(r'^app/', include('app.foo.urls')),
 
                        url(r'^admin/', include(admin.site.urls)),
-                       (r'^search/', include('haystack.urls')),
+                       # (r'^search/', include('haystack.urls')),
                        url(r'', include('store.urls')),
 )
