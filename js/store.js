@@ -1,6 +1,7 @@
 $(document).ready(function () {
     window.vm = new StoreVM(ko_data);
     ko.applyBindings(vm);
+
 });
 
 function StoreVM(data) {
@@ -10,6 +11,7 @@ function StoreVM(data) {
     self.title.subscribe(set_title);
     self.categories = ko.observableArray();
     self.keyword = ko.observable();
+
 
     self.fill_category = function (data) {
 
@@ -56,12 +58,18 @@ function StoreVM(data) {
 
     }
 
+    self.call_search = function (keyword) {
+        $.get('/search/' + keyword, function (data) {
+            self.fill_search(data);
+        });
+    }
+
 
     var sammy = Sammy(function () {
                 this.get('/category/:category_slug', function () {
                     //if the current category is requested don't do anything
                     if (typeof self.category == 'function') {
-                        if (self.type == 'category' && this.params.category_slug == self.category())
+                        if (self.type() == 'category' && this.params.category_slug == self.category())
                             return;
                         if (this.params.category_slug == self.category()) {
                             self.type('category');
@@ -75,8 +83,23 @@ function StoreVM(data) {
                 });
 
                 this.get('/search/:keyword', function () {
-                    console.log(this.params.keyword);
+                    if (self.type() == 'search' && this.params.keyword == self.keyword())
+                        return;
+                    if (this.params.keyword == self.keyword()) {
+                        self.type('search');
+                        return;
+                    }
+                    self.call_search(this.params.keyword);
+
                 });
+
+                this.get('/search/*', function () {
+//                NOP
+                });
+
+                this.notFound = function () {
+                    console.log('404 Not Found!')
+                }
 
 
                 this.get('/:product_slug', function () {
@@ -100,6 +123,12 @@ function StoreVM(data) {
         ;
     sammy.raise_errors = true;
     sammy.run();
+
+    $('#top-search').on('submit', function (e) {
+        console.log($('#search-box').val());
+        sammy.setLocation('/search/' + $('#search-box').val());
+        return false;
+    })
 
 }
 
