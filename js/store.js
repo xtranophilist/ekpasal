@@ -9,6 +9,7 @@ function StoreVM(data) {
     self.title = ko.observable('Search across e-commerce sites | EkPasal.com');
     self.title.subscribe(set_title);
     self.categories = ko.observableArray();
+    self.keyword = ko.observable();
 
     self.fill_category = function (data) {
 
@@ -25,6 +26,19 @@ function StoreVM(data) {
         }
     }
 
+    self.fill_search = function (data) {
+        if (data.results) {
+            self.type('none');
+            self.results = ko.observableArray(ko.utils.arrayMap(data.results, function (item) {
+                return new ProductVM(item);
+            }));
+            self.type('search');
+            self.keyword(data.keyword);
+            self.title(data.title);
+            console.log(data);
+        }
+    }
+
 
     if (self.type() == 'category') {
         self.fill_category(data);
@@ -37,36 +51,53 @@ function StoreVM(data) {
         self.product = ko.observable();
     }
 
+    if (self.type() == 'search') {
+        self.fill_search(data);
+
+    }
+
 
     var sammy = Sammy(function () {
-        this.get('/category/:category_slug', function () {
-            //if the current category is requested don't do anything
-            if (typeof self.category == 'function') {
-                if (self.type == 'category' && this.params.category_slug == self.category())
-                    return;
-                if (this.params.category_slug == self.category()) {
-                    self.type('category');
-                    return;
-                }
-            }
-            $.get('/category/' + this.params.category_slug, function (data) {
-                self.fill_category(data);
-            });
+                this.get('/category/:category_slug', function () {
+                    //if the current category is requested don't do anything
+                    if (typeof self.category == 'function') {
+                        if (self.type == 'category' && this.params.category_slug == self.category())
+                            return;
+                        if (this.params.category_slug == self.category()) {
+                            self.type('category');
+                            return;
+                        }
+                    }
+                    $.get('/category/' + this.params.category_slug, function (data) {
+                        self.fill_category(data);
+                    });
 
-        });
-        this.get('/:product_slug', function () {
-            var slug = this.params.product_slug;
-            if (self.type() == 'product' && slug == self.product().slug)
-                return;
-            var selected_obj = $.grep(self.products(), function (i) {
-                return slug == i.slug;
-            })[0];
-            self.product(selected_obj);
-            self.categories(selected_obj.categories);
-            self.type('product');
-            self.title(selected_obj.name)
-        });
-    });
+                });
+
+                this.get('/search/:keyword', function () {
+                    console.log(this.params.keyword);
+                });
+
+
+                this.get('/:product_slug', function () {
+                    var slug = this.params.product_slug;
+                    if (self.type() == 'product' && slug == self.product().slug)
+                        return;
+                    if (self.type() == 'search')
+                        var products = self['results']
+                    else if (self.type() == 'category')
+                        var products = self['products']
+                    var selected_obj = $.grep(products(), function (i) {
+                        return slug == i.slug;
+                    })[0];
+                    self.product(selected_obj);
+                    self.categories(selected_obj.categories);
+                    self.type('product');
+                    self.title(selected_obj.name)
+                });
+            }
+        )
+        ;
     sammy.raise_errors = true;
     sammy.run();
 
