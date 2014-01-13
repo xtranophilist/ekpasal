@@ -26,14 +26,14 @@ def filter_items(request, items, wrapper=lambda x: x):
     elif stock == '-1':
         filtered_products = filtered_products.filter(availability=-1)
     import math
-
     pages = int(math.ceil(float(len(filtered_products)) / items_per_page))
     # if requested page doesn't exist, use last page
     if page > pages:
         page = pages
-    filtered_products = filtered_products[(page - 1) * items_per_page:(page * items_per_page)]
-    for product in filtered_products:
-        products.append(wrapper(product).serialize())
+    if len(filtered_products):
+        filtered_products = filtered_products[(page - 1) * items_per_page:(page * items_per_page)]
+        for product in filtered_products:
+            products.append(wrapper(product).serialize())
     data = {
         'products': products,
         'pages': pages,
