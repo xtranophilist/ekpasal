@@ -80,10 +80,12 @@
         <!-- ko if: type()=='product' -->
         <span data-bind="text: product().name"></span>
         <!-- /ko -->
+        <!-- ko if: type()!='product' -->
         <div class="right">
-            Page <span data-bind="text: page">{{ data.page }}</span> of <span
-                data-bind="text: pages">{{ data.pages }}</span>
+            Page <span data-bind="text: page()">{{ data.page }}</span> of <span
+                data-bind="text: pages()">{{ data.pages }}</span>
         </div>
+        <!-- /ko -->
     {% endblock %}
 </nav>
 
