@@ -25,7 +25,12 @@ def filter_items(request, items, wrapper=lambda x: x):
         filtered_products = filtered_products.filter(availability__gt=-1)
     elif stock == '-1':
         filtered_products = filtered_products.filter(availability=-1)
-    pages = (len(filtered_products) + items_per_page // 2) // items_per_page
+    import math
+
+    pages = int(math.ceil(float(len(filtered_products)) / items_per_page))
+    # if requested page doesn't exist, use last page
+    if page > pages:
+        page = pages
     filtered_products = filtered_products[(page - 1) * items_per_page:(page * items_per_page)]
     for product in filtered_products:
         products.append(wrapper(product).serialize())
@@ -71,6 +76,7 @@ def search(request, keyword):
     data['type'] = 'search'
     data['keyword'] = keyword
     data['title'] = 'Search: ' + keyword
+    data['description'] = keyword + ' from different stores in Nepal'
     data['results'] = data['products']
     del data['products']
     return data
