@@ -40,18 +40,18 @@ header nav .inline-list, header nav .inline-list li a {
     margin: 0;
 }
 
-.original-price{
+.original-price {
     text-decoration: line-through;
 }
 
-.product-block img{
+.product-block img {
     width: 12em;
     height: 18em;
     display: block;
     margin: 0 auto;
 }
 
-.product-block{
+.product-block {
     width: 13em;
     border: 1px solid #F6F6F6;
     margin: 1em;
@@ -63,4 +63,9 @@ header nav .inline-list, header nav .inline-list li a {
 
 .breadcrumbs > .right:before {
     content: none;
+}
+
+.breadcrumbs > *, .breadcrumbs > * a, .breadcrumbs > * span {
+    text-transform: none;
+    font-size: 0.85em;
 }
