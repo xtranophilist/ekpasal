@@ -158,7 +158,7 @@ class Product(models.Model):
     purchase_url = models.CharField(max_length=254)
 
     def __str__(self):
-        return self.product.name + ' on ' + self.store.name
+        return self.name + ' on ' + self.store.name
 
     def get_absolute_url(self):
         return '/' + self.slug
