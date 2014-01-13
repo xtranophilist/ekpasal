@@ -7,6 +7,8 @@ $(document).ready(function () {
 function StoreVM(data) {
     var self = this;
     self.type = ko.observable(data['type']);
+    self.pages = ko.observable(data['pages']);
+    self.page = ko.observable(data['page']);
     self.title = ko.observable('Search across e-commerce sites | EkPasal.com');
     self.title.subscribe(set_title);
     self.categories = ko.observableArray();
