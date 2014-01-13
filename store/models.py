@@ -160,6 +160,9 @@ class Product(models.Model):
     def __str__(self):
         return self.product.name + ' on ' + self.store.name
 
+    def get_absolute_url(self):
+        return '/' + self.slug
+
     def save(self, *args, **kwargs):
         unique_slugify(self, self.name)
         super(Product, self).save(*args, **kwargs)
@@ -196,10 +199,10 @@ class Product(models.Model):
         return dct
 
 
-# class ProductInfo(models.Model):
-#     # product = models.ForeignKey(Product, related_name='info')
-#
-#     def serialize(self):
-#         return {
-#
-#         }
+        # class ProductInfo(models.Model):
+        #     # product = models.ForeignKey(Product, related_name='info')
+        #
+        #     def serialize(self):
+        #         return {
+        #
+        #         }

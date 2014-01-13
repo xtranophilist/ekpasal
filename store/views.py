@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from store.models import Category, Product
 from app.libr import markup_or_json
-
+from haystack.query import SearchQuerySet
 
 def list_categories(request):
     categories = Category.objects.all()
@@ -35,3 +35,10 @@ def view_product(request, slug):
         'title': product.name,
     }
     return data
+
+@markup_or_json('base.html')
+def search(request, keyword):
+    print keyword
+    results = SearchQuerySet().filter(content=keyword)
+    import pdb
+    pdb.set_trace()
