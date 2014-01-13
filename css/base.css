@@ -60,3 +60,7 @@ header nav .inline-list, header nav .inline-list li a {
     display: inline-block;
 
 }
+
+.breadcrumbs > .right:before {
+    content: none;
+}
