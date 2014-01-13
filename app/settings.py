@@ -91,6 +91,7 @@ INSTALLED_APPS = (
     'mptt',
     'easy_thumbnails',
     'haystack',
+    'debug_toolbar',
 
     'users',
     'store',
